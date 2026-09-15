@@ -1,5 +1,5 @@
 # Petty Cash Voucher (PCV) System (Frontend) 
-** This repository contains the Nuxt/Vue frontend for the Petty Cash Voucher web app for a fintech company, Getpayed Technology Solutions Ltd **  <br> <br>
+**This repository contains the Nuxt/Vue frontend for the Petty Cash Voucher web app for a fintech company, Getpayed Technology Solutions Ltd**  <br> <br>
 Live Demo: https://netlify.***.app <br> 
 Backend Repository: https://github.com/oliviaigbinosa/voucher-system-api
 ## Project Overview 
@@ -11,9 +11,13 @@ A Leave Request Form was added to this system due to the company's request. This
 - the approval/decline and process/reject flows are implemented
 - Password updates are done
 ## Languages & Frameworks
-- JavaScript/TypeScript v7.0.2
-- Nuxt.js v4.5.1
-- Vue.js v3.5.40
+- **Nuxt**: ^4.5.1
+- **Vue**: ^3.5.40  
+- **Vue Router**: ^5.2.0
+- **TypeScript**: ^7.0.2 (used in nuxt.config.ts)
+- **JavaScript** (ES6+ in Vue components)
+- **HTML** (Vue Single File Component templates)
+- **CSS** (Custom CSS with design system in assets/css/main.css, plus scoped CSS in components)
 ## Demo Mode
 <strong>This web app is a demo version of the Petty Cash Voucher System with prepopulated data for testing.</strong> It also offers an inbox tab (displayed as a mail icon) in the sidebar menu to view email previews since actual emails are not sent.
 
