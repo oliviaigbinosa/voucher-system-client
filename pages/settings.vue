@@ -208,6 +208,10 @@ async function handleChangePassword() {
   delete errors.general
   successMessage.value = ''
 
+  // Demo mode: prevent password updates
+  errors.general = "Demo mode. Can't update password"
+  return
+
   if (!form.currentPassword) {
     errors.currentPassword = 'Current password is required'
   }

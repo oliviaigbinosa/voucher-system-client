@@ -84,6 +84,41 @@
           {{ loggingIn ? 'Signing in...' : 'Sign in' }}
         </button>
       </form>
+
+      <div class="testing-section">
+        <p class="testing-text">( Testing this app? Click on either of the buttons below: </p>
+        <div class="testing-buttons">
+          <div class="testing-buttons-row">
+            <button
+              type="button"
+              class="btn btn-secondary testing-btn"
+              :disabled="loggingIn"
+              @click="quickLogin('finance')"
+            >
+              Sign in as finance manager
+            </button>
+            <button
+              type="button"
+              class="btn btn-secondary testing-btn"
+              :disabled="loggingIn"
+              @click="quickLogin('department_manager')"
+            >
+              Sign in as department manager
+            </button>
+          </div>
+          <div class="testing-buttons-row">
+            <button
+              type="button"
+              class="btn btn-secondary testing-btn"
+              :disabled="loggingIn"
+              @click="quickLogin('department_member')"
+            >
+              Sign in as department member
+            </button>
+          </div>
+        </div>
+        <p class="closing-bracket"> ) </p>
+      </div>
     </div>
   </div>
 </template>
@@ -139,6 +174,81 @@
     white-space: normal;
   }
 }
+
+.testing-section {
+  margin-top: 24px;
+  padding: 20px 23px 0;
+  border-top: 1px solid #e5e7eb;
+}
+
+.testing-text {
+  font-size: 13px;
+  color: #6b7280;
+  margin: 0 0 12px 0;
+   white-space: nowrap;
+}
+
+.testing-buttons {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.testing-buttons-row {
+  display: flex;
+  gap: 8px;
+}
+
+.testing-buttons-row:last-child {
+  justify-content: flex-start;
+}
+
+.testing-btn {
+  font-size: 12px;
+  padding: 8px 12px;
+  white-space: nowrap;
+  background-color: #f3f4f6;
+  color: #374151;
+  border: 1px solid #d1d5db;
+  cursor: pointer;
+  transition: background-color 0.15s ease, color 0.15s ease, border-color 0.15s ease;
+  position: relative;
+  z-index: 1;
+}
+
+.testing-buttons-row:first-child .testing-btn {
+  flex: 1;
+}
+
+.testing-btn:hover:not(:disabled) {
+  background-color: #e5e7eb;
+  color: #1f2937;
+  border-color: #9ca3af;
+}
+
+.testing-btn:active:not(:disabled) {
+  background-color: #d1d5db;
+  color: #111827;
+}
+
+.testing-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+.closing-bracket{
+  font-size: 13px;
+  color: #6b7280;
+  margin: 0 0 12px 0;
+  transform: translate(16px, -25px);
+}
+
+@media (max-width: 768px) {
+  .closing-bracket {
+    transform: translate(0, 0);
+    margin: 8px 0 12px 0;
+    text-align: left;
+  }
+}
 </style>
 
 <script setup>
@@ -153,10 +263,6 @@ useHead({
 
 const router = useRouter()
 const route = useRoute()
-
-function isLoginEmail(v) {
-  return /^[^\s@]+@getpayedmail\.com$/.test(v)
-}
 
 const showPassword = ref(false)
 const loggingIn = ref(false)
@@ -174,8 +280,8 @@ async function handleLogin() {
   delete loginErrors.password
   delete loginErrors.general
 
-  if (!isLoginEmail(loginForm.email)) {
-    loginErrors.email = 'Email must end with @getpayedmail.com'
+  if (!loginForm.email) {
+    loginErrors.email = 'Email is required'
   }
   if (!loginForm.password) {
     loginErrors.password = 'Password is required'
@@ -227,7 +333,67 @@ async function handleLogin() {
     
     router.replace(data.role === 'admin' || data.role === 'super admin' ? { name: 'admin' } : { name: 'form' })
   } catch {
-    loginErrors.general = 'Could not reach the server. Make sure the backend is running.'
+    loginErrors.general = 'Could not sign you in. Please check your network connection'
+  } finally {
+    loggingIn.value = false
+  }
+}
+
+async function quickLogin(role) {
+  delete loginErrors.email
+  delete loginErrors.password
+  delete loginErrors.general
+
+  const credentials = {
+    finance: { email: 'finance.manager@getpayedmail.com', password: 'Password!123' },
+    department_manager: { email: 'department.manager@getpayedmail.com', password: 'Password!123' },
+    department_member: { email: 'department.member@getpayedmail.com', password: 'Password!123' },
+  }
+
+  loginForm.email = credentials[role].email
+  loginForm.password = credentials[role].password
+
+  loggingIn.value = true
+  try {
+    const res = await fetch(`${API_BASE}/api/auth/login`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        email: loginForm.email,
+        password: loginForm.password,
+      }),
+    })
+
+    const data = await res.json()
+    if (!res.ok) {
+      if (data.error && data.error.includes('Too many login attempts')) {
+        loginErrors.general = data.error
+      } else {
+        loginErrors.general = data.error || 'Login failed'
+      }
+      return
+    }
+
+    if (data.token) {
+      sessionStorage.setItem('pcv_token', data.token)
+    }
+
+    loginUser(data.email, data.role, data.department || '', data.createdBy || '')
+    
+    const fetchPromises = [
+      fetchVouchers(),
+      fetchLeaveRequests()
+    ]
+    
+    if (data.role === 'admin' || data.role === 'super admin') {
+      fetchPromises.push(fetchOnboardingUsers())
+    }
+    
+    await Promise.all(fetchPromises)
+    
+    router.replace(data.role === 'admin' || data.role === 'super admin' ? { name: 'admin' } : { name: 'form' })
+  } catch {
+    loginErrors.general = 'Could not sign you in. Please check your network connection'
   } finally {
     loggingIn.value = false
   }

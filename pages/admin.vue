@@ -414,7 +414,7 @@
             <input
               v-model="onboardForm.email"
               type="email"
-              placeholder="firstname.lastname@getpayedmail.com"
+              placeholder="Enter a getpayed email"
               :class="{ error: onboardErrors.email }"
               @input="onboardForm.email = $event.target.value.replace(/[^a-zA-Z.@]/g, '').toLowerCase(); delete onboardErrors.email"
             />
@@ -453,7 +453,7 @@
                 Select department
               </button>
               <div
-                v-for="department in onboardDepts"
+                v-for="department in onboardingDeptOptions"
                 :key="department"
                 class="custom-select__option custom-select__option--row"
                 :class="{ selected: onboardForm.department === department }"
@@ -574,23 +574,25 @@
             </div>
               <span v-if="onboardErrors.role" class="err-msg err-msg--absolute">{{ onboardErrors.role }}</span>
           </div>
-          <span v-if="onboardErrors.general" class="err-msg">{{ onboardErrors.general }}</span>
-          <button type="submit" class="btn btn-primary onboarding-submit" :disabled="addingUser">
-            {{ addingUser ? 'Adding…' : 'Add User' }}
-            <svg
-              width="15"
-              height="15"
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              stroke-width="2"
-            >
-              <path d="M16 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2" />
-              <circle cx="8.5" cy="7" r="4" />
-              <line x1="20" y1="8" x2="20" y2="14" />
-              <line x1="23" y1="11" x2="17" y2="11" />
-            </svg>
-          </button>
+          <div class="onboarding-submit-wrap">
+            <button type="submit" class="btn btn-primary onboarding-submit" :disabled="addingUser">
+              {{ addingUser ? 'Adding…' : 'Add User' }}
+              <svg
+                width="15"
+                height="15"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+              >
+                <path d="M16 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2" />
+                <circle cx="8.5" cy="7" r="4" />
+                <line x1="20" y1="8" x2="20" y2="14" />
+                <line x1="23" y1="11" x2="17" y2="11" />
+              </svg>
+            </button>
+            <span v-if="onboardErrors.general" class="err-msg onboarding-submit-error">{{ onboardErrors.general }}</span>
+          </div>
         </form>
       </div>
 
@@ -864,11 +866,8 @@ watch(onboardingListTab, (value) => {
 })
 
 const isSuperAdmin = computed(() => userRole.value === 'super admin')
-const isFinanceManager = computed(
-  () => String(userEmail.value || '').toLowerCase() === 'gbemisola.olajide@getpayedmail.com',
-)
-const hasFullVisibility = computed(() => isSuperAdmin.value || isFinanceManager.value)
-const canViewTabs = computed(() => isSuperAdmin.value || isFinanceManager.value)
+const hasFullVisibility = computed(() => isSuperAdmin.value)
+const canViewTabs = computed(() => isSuperAdmin.value)
 const selectedVoucher = ref(null)
 const addingUser = ref(false)
 const removingUserId = ref('')
@@ -887,6 +886,8 @@ const onboardDeptDropdownOpen = ref(false)
 const onboardRoleDropdownOpen = ref(false)
 const onboardDeptDropdownRef = ref(null)
 const onboardRoleDropdownRef = ref(null)
+// Override onboarding department dropdown options for user onboarding tab
+const onboardingDeptOptions = ['Finance', 'Operations']
 const showCreateDeptModal = ref(false)
 const newDepartment = ref('')
 const newDepartmentError = ref('')
@@ -922,7 +923,7 @@ onMounted(async () => {
   try {
     await fetchOnboardingUsers()
   } catch {
-    onboardErrors.general = 'Could not load users. Make sure the backend is running.'
+    onboardErrors.general = 'Could not load users. Please check your network connection'
   } finally {
     loadingUsers.value = false
   }
@@ -948,12 +949,9 @@ onMounted(async () => {
 const adminFilter = reactive({ dept: '', user: '', status: '' })
 
 const displayedOnboardingUsers = computed(() => {
-  const FINANCE_MANAGER_EMAIL = 'gbemisola.olajide@getpayedmail.com'
-  const currentEmail = String(userEmail.value || '').toLowerCase()
-  // Only hide the finance manager account from other users; show it for the finance manager themself
+  const FINANCE_MANAGER_EMAIL = 'finance.manager@getpayedmail.com'
   const filtered = onboardingUsers.value.filter((user) => {
     const u = String(user.email || '').toLowerCase()
-    if (currentEmail === FINANCE_MANAGER_EMAIL) return true
     return u !== FINANCE_MANAGER_EMAIL
   })
 
@@ -1257,6 +1255,11 @@ async function handleAddUser() {
   delete onboardErrors.role
   delete onboardErrors.general
 
+  if (userRole.value === 'super admin' || isAdmin.value) {
+    onboardErrors.general = "Demo mode. Can't onboard users"
+    return
+  }
+
   if (!onboardForm.email) {
     onboardErrors.email = 'Email is required'
   } else if (!/@getpayedmail\.com$/.test(onboardForm.email)) {
@@ -1404,8 +1407,27 @@ async function handleRemoveUser(id) {
   align-items: flex-start;
 }
 
+.onboarding-submit-wrap {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 6px;
+  position: relative;
+  margin-top: 37px;
+}
+
 .onboarding-submit {
   transform: translateY(-18px);
+}
+
+.onboarding-submit-error {
+  position: absolute;
+  top: calc(100% + 4px);
+  left: 0;
+  margin-top: -12px;
+  max-width: 260px;
+  white-space: normal;
+  font-size: 11.7px;
 }
 
 .onboarding-field input[type="email"] {

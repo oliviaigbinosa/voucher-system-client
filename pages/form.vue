@@ -4,7 +4,7 @@
     <div v-if="submitted" class="card success-card">
       <div class="success-icon">✓</div>
       <h2 class="serif">Voucher Submitted</h2>
-      <p>Your voucher has been sent by email.</p>
+      <p class="success-subtext">Demo mode. Click inbox icon in sidebar menu to view email preview</p>
       <code class="voucher-badge">{{ lastVoucherNo }}</code>
       <div class="success-actions">
         <button class="btn btn-outline" @click="router.push({ name: 'vouchers' })">
@@ -313,12 +313,11 @@ import FilePreview from '../components/FilePreview.vue'
 import { addVoucher, userEmail, userDepartment, userCreatedBy, userRole, fetchCurrentUser, isAdmin, onboardingUsers, fetchOnboardingUsers, allVouchers, loadingVouchers, API_BASE, fetchNextSerial } from '~/composables/appState'
 
 const FINANCE_EMAIL = 'finance@getpayedmail.com'
-const FINANCE_MANAGER_EMAIL = 'gbemisola.olajide@getpayedmail.com'
+const FINANCE_MANAGER_EMAIL = 'finance.manager@getpayedmail.com'
 
 function defaultToEmail() {
-  if (userRole.value === 'super admin' && userEmail.value !== FINANCE_MANAGER_EMAIL) return FINANCE_MANAGER_EMAIL
-  if (isAdmin.value) return FINANCE_EMAIL
-  return userCreatedBy.value || ''
+  if (String(userEmail.value || '').toLowerCase() === 'department.member@getpayedmail.com') return 'department.manager@getpayedmail.com'
+  return FINANCE_EMAIL
 }
 
 function defaultCcEmail() {
@@ -669,6 +668,7 @@ async function submitVoucher() {
     await addVoucher(entry)
 
     const payload = {
+      id: voucherNo.value,
       voucherNo: voucherNo.value,
       from: form.from,
       to: form.to,

@@ -27,7 +27,7 @@
             id="forgot-email"
             v-model="email"
             type="email"
-            placeholder="Enter your email"
+            placeholder="Test with demo email"
             :disabled="loading"
             :class="{ error: error }"
           />
@@ -95,7 +95,7 @@ async function handleSubmit() {
     message.value = 'A reset link has been sent to your email. Please check your inbox.'
     email.value = ''
   } catch {
-    error.value = 'Could not reach the server. Make sure the backend is running.'
+    error.value = 'Could not send reset link. Please check your network connection'
   } finally {
     loading.value = false
   }

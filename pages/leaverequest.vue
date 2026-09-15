@@ -63,7 +63,7 @@
       <div v-if="submitted" class="card success-card">
         <div class="success-icon">✓</div>
         <h2 class="serif">Leave Request Submitted</h2>
-        <p>Your leave request has been sent for review.</p>
+        <p class="success-subtext">Demo mode. Click inbox icon in sidebar menu to view email preview</p>
         <code class="leave-badge">{{ submittedEmployee }}</code>
         <div class="success-actions">
           <button v-if="shouldShowAdminUi" class="btn btn-outline" @click="viewRequests">View Leave Requests</button>
@@ -87,8 +87,9 @@
   type="text"
   v-model="form.departmentManager"
   placeholder="Enter department manager email"
-  :readonly="!isAdmin || (isSuperAdmin && !isFinanceManager)"
+  :readonly="!isAdmin || (isSuperAdmin && !isFinanceManager) || shouldUseDepartmentManagerEmail(userEmail) || shouldForceFinanceManagerForDepartment(userEmail)"
   :error="errors.departmentManager"
+  :hint="isFinanceManager ? 'Test with department.manager@getpayedmail.com' : ''"
   @input="clearErr('departmentManager')"
 />
 
@@ -562,7 +563,7 @@
               </td>
               <td class="text-center">
                 <template v-if="shouldShowAdminUi && (!isHr || isManager(leave))">
-                  <template v-if="(leave.status || 'Pending').toLowerCase() === 'pending' && (!leave.submitterIsAdmin || isManager(leave)) && String(leave.submittedBy || '').toLowerCase() !== String(userEmail.value || '').toLowerCase()">
+                  <template v-if="canTakeLeaveAction(leave)">
                     <div style="display: flex; justify-content: center; gap: 6px; align-items: center;">
                       <button class="btn btn-approve" style="margin-top: 0; padding: 4px 8px; font-size: 11px; border-radius: 9999px; white-space: nowrap;" @click.stop="confirmAction(leave, 'Approved')">Approve</button>
                       <button class="btn btn-decline" style="margin-top: 0; padding: 4px 8px; font-size: 11px; border-radius: 9999px; white-space: nowrap;" @click.stop="confirmAction(leave, 'Declined')">Decline</button>
@@ -617,7 +618,7 @@
 </template>
 
 <script setup>
-import { reactive, ref, computed, onMounted, onBeforeUnmount } from 'vue'
+import { reactive, ref, computed, onMounted, onBeforeUnmount, watch } from 'vue'
 import { useCookie } from '#app'
 import {
   isAdmin,
@@ -635,10 +636,11 @@ import {
   loadingLeaveRequests,
   onboardingUsers,
   API_BASE,
+  getAuthHeaders,
 } from '~/composables/appState'
 import VoucherTableSkeleton from '../components/VoucherTableSkeleton.vue'
 
-const FINANCE_MANAGER_EMAIL = 'gbemisola.olajide@getpayedmail.com'
+const FINANCE_MANAGER_EMAIL = 'finance.manager@getpayedmail.com'
 const showPreview = ref(false)
 const showFilePreview = ref(false)
 const previewFile = ref(null)
@@ -648,21 +650,52 @@ const submitted = ref(false)
 const submittedEmployee = ref('')
 const isSuperAdmin = computed(() => userRole.value === 'super admin')
 const isFinanceManager = computed(() => String(userEmail.value || '').toLowerCase() === FINANCE_MANAGER_EMAIL)
-const isHr = computed(() => String(userEmail.value || '').toLowerCase() === 'chinenye.onyia@getpayedmail.com')
+const isHr = computed(() => String(userEmail.value || '').toLowerCase() === 'hr@getpayedmail.com')
+const shouldForceFinanceManagerForDepartment = (email) => {
+  const normalizedEmail = String(email || '').toLowerCase()
+  return normalizedEmail === 'department.manager@getpayedmail.com'
+}
+
+const shouldUseDepartmentManagerEmail = (email) => {
+  const normalizedEmail = String(email || '').toLowerCase()
+  return normalizedEmail === 'department.member@getpayedmail.com'
+}
 const shouldShowAdminUi = computed(() =>
   (isAdmin.value && !isSuperAdmin.value) || isFinanceManager.value || isHr.value,
 )
 // Helper available to the template to check if the current user is the manager for a leave
 const isManager = (leave) => String(leave.departmentManager || '').toLowerCase() === String(userEmail.value || '').toLowerCase()
+
+const canTakeLeaveAction = (leave) => {
+  if (!leave) return false
+  const status = String(leave.status || 'Pending').toLowerCase()
+  const submittedBy = String(leave.submittedBy || '').toLowerCase()
+  const currentUser = String(userEmail.value || '').toLowerCase()
+  if (status !== 'pending') return false
+  if (submittedBy === currentUser) return false
+  if (submittedBy === FINANCE_MANAGER_EMAIL && currentUser !== FINANCE_MANAGER_EMAIL) return true
+  if (submittedBy === FINANCE_MANAGER_EMAIL) return false
+  return (!leave.submitterIsAdmin || isManager(leave))
+}
+
 const form = reactive({
   employeeName: '',
-  departmentManager: userRole.value === 'super admin' && !isFinanceManager.value ? FINANCE_MANAGER_EMAIL : (userCreatedBy.value || ''),
+  departmentManager: '',
   department: userRole.value === 'super admin' ? 'Finance' : (userDepartment.value || ''),
   leaveType: '',
   startDate: '',
   endDate: '',
   reason: '',
 })
+
+// Watch for user email changes to update department manager
+watch(userEmail, (newEmail) => {
+  if (shouldUseDepartmentManagerEmail(newEmail)) {
+    form.departmentManager = 'department.manager@getpayedmail.com'
+  } else if (shouldForceFinanceManagerForDepartment(newEmail)) {
+    form.departmentManager = FINANCE_MANAGER_EMAIL
+  }
+}, { immediate: true })
 const attachments = ref([])
 const errors = reactive({})
 
@@ -684,7 +717,7 @@ const adminEmails = ref([])
 
 async function fetchAdminEmails() {
   const res = await fetch(`${API_BASE}/api/admin/emails`, {
-    headers: { 'x-admin-email': userEmail.value },
+    headers: getAuthHeaders(),
   })
   if (!res.ok) {
     throw new Error('Failed to fetch admin emails')
@@ -696,7 +729,7 @@ const userEmails = ref([])
 
 async function fetchUserEmails() {
   const res = await fetch(`${API_BASE}/api/admin/user-emails`, {
-    headers: { 'x-admin-email': userEmail.value },
+    headers: getAuthHeaders(),
   })
   if (!res.ok) {
     throw new Error('Failed to fetch user emails')
@@ -753,7 +786,7 @@ async function confirmStatus() {
 
 const baseLeaveRequests = computed(() => {
   const myEmail = String(userEmail.value || '').toLowerCase()
-  const canViewAll = myEmail === 'chinenye.onyia@getpayedmail.com'
+  const canViewAll = myEmail === 'hr@getpayedmail.com'
   const onboardedEmails = new Set(onboardingUsers.value.map((user) => String(user.email || '').toLowerCase()))
   if (isFinanceManager.value) {
     const financeMemberEmails = new Set(
@@ -847,14 +880,16 @@ async function validateManagerEmail(manager) {
   if (!managerEmail) {
     return { valid: false, error: 'Department manager email is required' }
   }
+  if (managerEmail === myEmail) {
+    return { valid: false, error: 'Enter a valid email' }
+  }
+  // Allow finance manager as a special valid manager
+  if (managerEmail === FINANCE_MANAGER_EMAIL) return { valid: true }
   if (managerEmail.indexOf('@') <= 0) {
     return { valid: false, error: 'Enter a valid email address' }
   }
   if (!/^[^\s@]+@getpayedmail\.com$/.test(managerEmail)) {
     return { valid: false, error: 'Manager email must end with @getpayedmail.com' }
-  }
-  if (managerEmail === myEmail) {
-    return { valid: false, error: 'Invalid email' }
   }
 
   try {
@@ -862,6 +897,7 @@ async function validateManagerEmail(manager) {
       `${API_BASE}/api/admin/validate-manager-email?email=${encodeURIComponent(managerEmail)}`,
       {
         headers: {
+          ...getAuthHeaders(),
           'x-admin-email': userEmail.value,
           'x-user-email': userEmail.value,
         },
@@ -1036,7 +1072,13 @@ onMounted(async () => {
       // ignore
     }
   }
-  if (isFinanceManager.value) {
+  if (shouldUseDepartmentManagerEmail(userEmail.value)) {
+    // Department member keeps the regular department manager email
+    form.departmentManager = 'department.manager@getpayedmail.com'
+  } else if (shouldForceFinanceManagerForDepartment(userEmail.value)) {
+    // Department manager is always routed to the finance manager
+    form.departmentManager = FINANCE_MANAGER_EMAIL
+  } else if (isFinanceManager.value) {
     // Finance manager can edit department manager field
     form.departmentManager = userCreatedBy.value || ''
   } else if (isSuperAdmin.value) {
@@ -1073,7 +1115,11 @@ function openFilePreview(file) {
 
 function resetForm() {
   let deptManager
-  if (isFinanceManager.value) {
+  if (shouldUseDepartmentManagerEmail(userEmail.value)) {
+    deptManager = 'department.manager@getpayedmail.com'
+  } else if (shouldForceFinanceManagerForDepartment(userEmail.value)) {
+    deptManager = FINANCE_MANAGER_EMAIL
+  } else if (isFinanceManager.value) {
     deptManager = userCreatedBy.value || ''
   } else if (isSuperAdmin.value) {
     deptManager = FINANCE_MANAGER_EMAIL
@@ -1304,6 +1350,15 @@ async function submitLeave() {
 
   .modal-body {
     padding: 16px;
+  }
+
+  .dashboard-tabs {
+    transform: translateY(-8px);
+  }
+
+  .dashboard-tabs .dashboard-tabs__tab {
+    font-size: 14px;
+    padding: 12px 16px;
   }
 }
 
@@ -1644,6 +1699,23 @@ async function submitLeave() {
   .admin-filter-field {
     min-width: 140px;
   }
+
+  .dashboard-tabs {
+    transform: translateY(-4px);
+  }
+
+  .dashboard-tabs .dashboard-tabs__tab {
+    font-size: 13px;
+    padding: 10px 12px;
+  }
+
+  .page-header {
+    margin: 4px auto 16px;
+  }
+
+  .admin-filters {
+    padding: 12px;
+  }
 }
 
 .admin-filter-field {
@@ -1663,6 +1735,36 @@ async function submitLeave() {
   .admin-filter-field {
     min-width: 140px;
     flex: 1 1 100%;
+  }
+}
+
+@media (max-width: 1024px) {
+  .content .vouchers-table-wrap {
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .content .vouchers-table {
+    min-width: 700px;
+  }
+
+  .dashboard-tabs {
+    max-width: 100%;
+  }
+
+  .admin-filters {
+    max-width: 100%;
+  }
+}
+
+@media (max-width: 600px) {
+  .content .vouchers-table {
+    min-width: 550px;
+  }
+
+  .dashboard-tabs .dashboard-tabs__tab {
+    font-size: 13px;
+    padding: 11px 14px;
   }
 }
 </style>

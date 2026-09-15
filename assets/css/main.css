@@ -555,10 +555,15 @@ textarea {
   font-weight: 700;
 }
 
-.success-card p {
+.success-subtext {
   font-size: 14px;
   color: var(--muted-fg);
-  max-width: 300px;
+  max-width: 320px;
+  text-align: center;
+  margin: 0 auto;
+  word-wrap: break-word;
+  white-space: normal;
+  line-height: 1.4;
 }
 
 /* ── Modal backdrop ─────────────────────────────────────────── */
@@ -990,6 +995,12 @@ textarea {
   padding: 0 6px 8px;
 }
 
+.sidebar__nav-icons {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
 .sidebar__nav-group {
   font-family: var(--font-mono);
   font-size: 9px;
@@ -1010,6 +1021,7 @@ textarea {
   transition:
     background 0.15s,
     color 0.15s;
+  position: relative;
 }
 
 .sidebar__settings-btn:hover {
@@ -1065,16 +1077,20 @@ textarea {
 }
 
 .sidebar__badge {
-  margin-left: auto;
+  position: absolute;
+  top: -2px;
+  right: -2px;
   background: var(--accent);
   color: var(--accent-fg);
-  font-size: 10px;
+  font-size: 9px;
   font-family: var(--font-mono);
   font-weight: 600;
-  padding: 1px 7px;
+  padding: 1px 4px;
   border-radius: 99px;
-  min-width: 20px;
+  min-width: 14px;
   text-align: center;
+  line-height: 1;
+  border: 2px solid var(--primary);
 }
 
 .sidebar__footer {
@@ -2539,5 +2555,158 @@ router-link {
     left: 12px;
     font-size: 13px;
     max-width: calc(100% - 60px);
+  }
+
+  /* ── Testing buttons ─────────────────────────────────────── */
+  .testing-buttons-row {
+    flex-direction: column;
+  }
+
+  .testing-buttons-row .testing-btn {
+    width: 100%;
+  }
+
+  .testing-text {
+    white-space: normal;
+  }
+
+  .closing-bracket {
+    transform: none;
+    margin: 8px 0 12px 0;
+  }
+}
+
+/* ═══════════════════════════════════════════════════════════
+   RESPONSIVE — Small Phone (≤ 360px)
+   ═══════════════════════════════════════════════════════════ */
+@media (max-width: 360px) {
+  /* ── App wrapper ─────────────────────────────────────────── */
+  .app-wrap {
+    padding: 12px 6px;
+  }
+
+  /* ── Card ────────────────────────────────────────────────── */
+  .card {
+    padding: 14px 10px;
+  }
+
+  /* ── Voucher header ──────────────────────────────────────── */
+  .pcv-header h1 {
+    font-size: 14px;
+  }
+
+  .company-label {
+    font-size: 9px;
+  }
+
+  /* ── Stepper ─────────────────────────────────────────────── */
+  .stepper__bubble {
+    width: 24px;
+    height: 24px;
+    font-size: 9px;
+  }
+
+  /* ── Step heading ────────────────────────────────────────── */
+  .step-head h2 {
+    font-size: 13px;
+  }
+
+  /* ── Inputs ──────────────────────────────────────────────── */
+  input,
+  textarea,
+  select {
+    padding: 7px 9px;
+    font-size: 12px;
+  }
+
+  /* ── Buttons ─────────────────────────────────────────────── */
+  .btn {
+    padding: 7px 12px;
+    font-size: 11px;
+  }
+
+  /* ── Login page ──────────────────────────────────────────── */
+  .login-card {
+    padding: 20px 14px;
+  }
+
+  .login-card__title {
+    font-size: 16px;
+  }
+
+  .login-card__sub {
+    font-size: 11px;
+  }
+
+  /* ── Sidebar ─────────────────────────────────────────────── */
+  .sidebar {
+    width: 100%;
+  }
+
+  .sidebar__nav-item {
+    font-size: 13px;
+    padding: 12px 10px;
+  }
+
+  /* ── Inbox ───────────────────────────────────────────────── */
+  .inbox-item {
+    padding: 12px 14px;
+  }
+
+  .inbox-item__avatar {
+    width: 36px;
+    height: 36px;
+    font-size: 13px;
+  }
+
+  .inbox-item__sender {
+    font-size: 13px;
+  }
+
+  .inbox-item__subject {
+    font-size: 13px;
+  }
+
+  .inbox-item__preview {
+    font-size: 12px;
+  }
+
+  /* ── Admin page ─────────────────────────────────────────── */
+  .admin-filters {
+    padding: 12px 14px;
+  }
+
+  .admin-filter-field {
+    min-width: 0;
+  }
+
+  .admin-filter-clear {
+    width: 100%;
+  }
+
+  .admin-user-email {
+    max-width: 120px;
+  }
+
+  .voucher-purpose {
+    max-width: 70px;
+  }
+
+  /* ── Onboarding form ───────────────────────────────────── */
+  .onboarding-form {
+    padding: 14px 10px;
+  }
+
+  .onboarding-form__fields {
+    gap: 10px;
+  }
+
+  /* ── Settings page ───────────────────────────────────────── */
+  .settings-form {
+    padding: 16px 12px;
+  }
+
+  .settings-form__fields {
+    gap: 14px;
   }
 }

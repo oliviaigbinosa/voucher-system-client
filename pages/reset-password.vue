@@ -99,6 +99,8 @@
           errors.general
         }}</span>
 
+        <span v-if="showInboxHint" class="info-msg">Check the inbox tab to see email preview</span>
+
         <button
           type="submit"
           class="btn btn-primary login-submit"
@@ -137,6 +139,7 @@ const showConfirm = ref(false)
 const loading = ref(false)
 const success = ref(false)
 const errors = reactive({})
+const showInboxHint = ref(false)
 
 function validatePassword(password) {
   if (!password) return 'Password is required'
@@ -150,6 +153,9 @@ function validatePassword(password) {
 
 async function handleSubmit() {
   Object.keys(errors).forEach((k) => delete errors[k])
+
+  // Show inbox hint while reset is being submitted so user can check Inbox preview
+  showInboxHint.value = true
 
   if (!token.value) errors.general = 'Reset link is missing or invalid'
 
@@ -191,7 +197,7 @@ async function handleSubmit() {
 
     success.value = true
   } catch {
-    errors.general = 'Could not reach the server. Make sure the backend is running.'
+    errors.general = 'Could not reset password. Please check your network connection'
   } finally {
     loading.value = false
   }

@@ -190,7 +190,28 @@ async function fetchOnboardingUsers() {
   if (!res.ok) {
     throw new Error('Failed to load users')
   }
-  onboardingUsers.value = await res.json()
+  const users = await res.json()
+  const demoManager = 'department.manager@getpayedmail.com'
+  const demoMember = 'department.member@getpayedmail.com'
+  let list: any[] = Array.isArray(users) ? users.slice() : []
+  // If current user is department manager, only ensure the member is present
+  if (String(userEmail.value || '').toLowerCase() === demoManager) {
+    const hasMember = list.some((u) => String(u.email || '').toLowerCase() === demoMember)
+    if (!hasMember) {
+      list.push({ id: `demo-${Date.now()}-mem`, email: demoMember, addedAt: new Date().toISOString(), role: 'user', department: 'Demo Department', createdBy: demoManager })
+    }
+  } else {
+    // For other users, ensure both manager and member exist for demo purposes
+    const hasManager = list.some((u) => String(u.email || '').toLowerCase() === demoManager)
+    const hasMember = list.some((u) => String(u.email || '').toLowerCase() === demoMember)
+    if (!hasManager) {
+      list.push({ id: `demo-${Date.now()}-mgr`, email: demoManager, addedAt: new Date().toISOString(), role: 'admin', department: 'Demo Department' })
+    }
+    if (!hasMember) {
+      list.push({ id: `demo-${Date.now()}-mem`, email: demoMember, addedAt: new Date().toISOString(), role: 'user', department: 'Demo Department', createdBy: demoManager })
+    }
+  }
+  onboardingUsers.value = list
 }
 
 async function addOnboardingUser(email: string, password: string, createdBy?: string, department?: string, role?: string) {

@@ -332,16 +332,13 @@ const isAdminOrSuper = computed(() => userRole.value === 'admin' || userRole.val
 const processingAction = ref('')
 const declineAction = ref('decline')
 const FINANCE_EMAIL = 'finance@getpayedmail.com'
-const FINANCE_MANAGER_EMAIL = 'gbemisola.olajide@getpayedmail.com'
+const FINANCE_MANAGER_EMAIL = 'finance.manager@getpayedmail.com'
 
 const isFinanceRecipient = computed(() => {
   if (!selectedVoucher.value) return false
   const email = userEmail.value.toLowerCase()
-  const recipients = selectedVoucher.value.financeSuperAdminRecipients || []
-  if (recipients.some((recipient) => String(recipient).toLowerCase() === email)) {
-    return true
-  }
-  if (!isSuperAdmin.value) return false
+  if (email !== FINANCE_MANAGER_EMAIL) return false
+
   const to = String(selectedVoucher.value.to || '').toLowerCase()
   const cc = String(selectedVoucher.value.cc || '').toLowerCase()
   return to === FINANCE_EMAIL || cc === FINANCE_EMAIL
@@ -480,10 +477,6 @@ const receivedVouchers = computed(() =>
       }
     }
     const financeManagerSent = submittedBy === FINANCE_MANAGER_EMAIL.toLowerCase()
-    const financeSuperAdminMatch =
-      (voucher.financeSuperAdminRecipients || []).some(
-        (recipient) => String(recipient).toLowerCase() === email,
-      )
 
     if (isSuperAdmin.value && financeRouted && financeManagerSent && email !== FINANCE_MANAGER_EMAIL.toLowerCase()) {
       return false
@@ -493,7 +486,7 @@ const receivedVouchers = computed(() =>
     const ccApprovalsMatch =
       ccMatch && (voucher.submitterIsAdmin ? ['Approved', 'Processed', 'Rejected', 'Declined'].includes(statusRaw) : statusRaw === 'Approved')
 
-    const isMatch = toMatch || financeSuperAdminMatch || ccApprovalsMatch || (financeRouted && isSuperAdmin.value)
+    const isMatch = toMatch || ccApprovalsMatch || (financeRouted && email === FINANCE_MANAGER_EMAIL.toLowerCase())
     if (!isMatch) return false
 
     if (isSuperAdmin.value) {
