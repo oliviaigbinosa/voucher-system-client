@@ -1259,6 +1259,20 @@ async function submitLeave() {
   gap: 28px;
 }
 
+/* Fix date input width to fit within form */
+.form-grid input[type="date"] {
+  width: 100%;
+  max-width: 100%;
+  box-sizing: border-box;
+  min-width: 0;
+}
+
+/* Ensure field containers respect grid constraints */
+.form-grid .field {
+  min-width: 0;
+  width: 100%;
+}
+
 .full-width {
   grid-column: 1 / -1;
 }
@@ -1360,6 +1374,18 @@ async function submitLeave() {
     font-size: 14px;
     padding: 12px 16px;
   }
+
+  /* Ensure date fields are full width on mobile */
+  .form-grid > .field.full-width {
+    grid-column: 1 / -1;
+  }
+
+  /* Ensure date fields fit properly on mobile */
+  .form-grid input[type="date"] {
+    width: 100%;
+    min-width: 0;
+    font-size: 16px; /* Prevent iOS zoom on focus */
+  }
 }
 
 .modal {
@@ -1429,7 +1455,7 @@ async function submitLeave() {
 
 .preview-row {
   display: flex;
-  align-items: center;
+  align-items: flex-start;
   gap: 20px;
   padding: 4px 0;
   font-size: 14px;
@@ -1491,9 +1517,7 @@ async function submitLeave() {
   justify-content: flex-start;
 }
 
-.preview-row {
-  justify-content: flex-start;
-}
+
 
 .content .vouchers-table-wrap {
   max-width: 1040px;
@@ -1755,6 +1779,16 @@ async function submitLeave() {
   .admin-filters {
     max-width: 100%;
   }
+
+  /* Ensure form fields fit on medium screens */
+  .form-grid {
+    gap: 20px;
+  }
+
+  .form-grid input[type="date"] {
+    width: 100%;
+    min-width: 0;
+  }
 }
 
 @media (max-width: 600px) {
@@ -1765,6 +1799,17 @@ async function submitLeave() {
   .dashboard-tabs .dashboard-tabs__tab {
     font-size: 13px;
     padding: 11px 14px;
+  }
+
+  /* Ensure date inputs are responsive on small screens */
+  .form-grid input[type="date"] {
+    width: 100%;
+    min-width: 0;
+    padding: 8px 10px;
+  }
+
+  .form-grid .field {
+    min-width: 0;
   }
 }
 </style>

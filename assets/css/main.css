@@ -632,6 +632,7 @@ textarea {
   display: flex;
   flex-direction: column;
   gap: 20px;
+  text-align: left;
 }
 
 .modal-footer {
@@ -1759,6 +1760,7 @@ textarea {
 
   .modal-body {
     padding: 16px;
+    text-align: left;
   }
 
   .pcv-header h1 {
@@ -2134,6 +2136,7 @@ router-link {
   .modal-body {
     padding: 16px;
     gap: 16px;
+    text-align: left;
   }
 
   .modal-footer {
@@ -2145,6 +2148,7 @@ router-link {
   .preview-row {
     flex-direction: column;
     gap: 4px;
+    text-align: left;
   }
 
   .preview-row > span:first-child {
@@ -2446,6 +2450,7 @@ router-link {
   .modal-body {
     padding: 12px;
     gap: 12px;
+    text-align: left;
   }
 
   .modal-footer {
