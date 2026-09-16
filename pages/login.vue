@@ -333,7 +333,7 @@ async function handleLogin() {
     
     router.replace(data.role === 'admin' || data.role === 'super admin' ? { name: 'admin' } : { name: 'form' })
   } catch {
-    loginErrors.general = 'Could not sign you in. Please check your network connection'
+    loginErrors.general = 'Could not fetch onboarding users. Please check your network connection'
   } finally {
     loggingIn.value = false
   }
@@ -393,7 +393,7 @@ async function quickLogin(role) {
     
     router.replace(data.role === 'admin' || data.role === 'super admin' ? { name: 'admin' } : { name: 'form' })
   } catch {
-    loginErrors.general = 'Could not sign you in. Please check your network connection'
+    loginErrors.general = 'Could not fetch onboarding users. Please check your network connection'
   } finally {
     loggingIn.value = false
   }
