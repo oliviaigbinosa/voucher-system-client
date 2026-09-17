@@ -151,7 +151,7 @@ async function handleSubmit() {
   border-radius: var(--radius);
   border: 1px solid var(--border);
   background: var(--input-bg);
-  font-size: 16px; /* Prevent iOS zoom on focus */
+  font-size: 14px;
   color: var(--fg);
   outline: none;
   transition:

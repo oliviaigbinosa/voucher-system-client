@@ -1266,6 +1266,29 @@ async function submitLeave() {
   box-sizing: border-box;
   min-width: 0;
   padding: 10px 12px;
+  /* Fix for iOS date input display */
+  -webkit-appearance: none;
+  -moz-appearance: textfield;
+}
+
+/* Additional iOS date input fixes */
+.form-grid input[type="date"]::-webkit-date-and-time-value {
+  text-align: left;
+}
+
+.form-grid input[type="date"]::-webkit-calendar-picker-indicator {
+  padding: 0;
+  margin: 0;
+  opacity: 1;
+  cursor: pointer;
+}
+
+/* Firefox date input fixes */
+.form-grid input[type="date"]::-moz-calendar-picker-indicator {
+  padding: 0;
+  margin: 0;
+  opacity: 1;
+  cursor: pointer;
 }
 
 /* Ensure field containers respect grid constraints */
@@ -1768,18 +1791,30 @@ async function submitLeave() {
 
 .filter-row .admin-filter-clear {
   height: 34px;
-  padding: 0 16px;
+  padding: 0 12px;
   white-space: nowrap;
   font-size: 13px;
   transform: translateY(-4px);
   flex-shrink: 0;
   min-width: fit-content;
+  max-width: 100%;
 }
 
 @media (max-width: 768px) {
   .admin-filter-field {
     min-width: 140px;
     flex: 1 1 100%;
+  }
+
+  .filter-row {
+    gap: 8px;
+  }
+
+  .filter-row .admin-filter-clear {
+    font-size: 12px;
+    padding: 0 10px;
+    height: 32px;
+    transform: translateY(-2px);
   }
 }
 

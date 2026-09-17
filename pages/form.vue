@@ -310,6 +310,31 @@
   max-width: 100%;
   box-sizing: border-box;
   min-width: 0;
+  /* Fix for iOS date input display */
+  -webkit-appearance: none;
+  -moz-appearance: textfield;
+  /* Ensure consistent padding across browsers */
+  padding: 10px 12px;
+}
+
+/* Additional iOS date input fixes */
+.step-card input[type="date"]::-webkit-date-and-time-value {
+  text-align: left;
+}
+
+.step-card input[type="date"]::-webkit-calendar-picker-indicator {
+  padding: 0;
+  margin: 0;
+  opacity: 1;
+  cursor: pointer;
+}
+
+/* Firefox date input fixes */
+.step-card input[type="date"]::-moz-calendar-picker-indicator {
+  padding: 0;
+  margin: 0;
+  opacity: 1;
+  cursor: pointer;
 }
 
 /* Ensure field containers respect constraints */

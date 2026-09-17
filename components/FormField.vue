@@ -8,11 +8,11 @@
         :id="inputId"
         :type="type"
         :value="modelValue"
-        :placeholder="placeholder"
+        :placeholder="type === 'date' ? 'mm/dd/yy' : placeholder"
         :readonly="readonly"
         :disabled="disabled"
         :inputmode="inputmode || undefined"
-       
+
         @input="handleInput" :class="[inputClass, { 'error': !!error }]" />
       <slot name="suffix" />
     </div>
@@ -22,11 +22,11 @@
       :id="inputId"
       :type="type"
       :value="modelValue"
-      :placeholder="placeholder"
+      :placeholder="type === 'date' ? 'mm/dd/yy' : placeholder"
       :readonly="readonly"
       :disabled="disabled"
       :inputmode="inputmode || undefined"
-     
+
       @input="handleInput" :class="[inputClass, { 'error': !!error }]" />
 
     <select
@@ -110,11 +110,31 @@ function handleChange(e) {
 </script>
 
 <style scoped>
-/* Prevent iOS zoom on input focus */
-.field input,
-.field textarea,
-.field select {
-  font-size: 16px;
+/* Date input specific fixes */
+.field input[type="date"] {
+  /* Fix for iOS date input display */
+  -webkit-appearance: none;
+  -moz-appearance: textfield;
+}
+
+/* Additional iOS date input fixes */
+.field input[type="date"]::-webkit-date-and-time-value {
+  text-align: left;
+}
+
+.field input[type="date"]::-webkit-calendar-picker-indicator {
+  padding: 0;
+  margin: 0;
+  opacity: 1;
+  cursor: pointer;
+}
+
+/* Firefox date input fixes */
+.field input[type="date"]::-moz-calendar-picker-indicator {
+  padding: 0;
+  margin: 0;
+  opacity: 1;
+  cursor: pointer;
 }
 
 @media (max-width: 768px) {

@@ -31,11 +31,16 @@
 }
 
 /* ── Base ───────────────────────────────────────────────────── */
+html {
+  font-size: 16px;
+}
+
 body {
   font-family: var(--font-body);
   background: var(--bg);
   color: var(--fg);
   min-height: 100vh;
+  font-size: 1rem;
 }
 
 /* ── App wrapper ────────────────────────────────────────────── */
@@ -308,6 +313,31 @@ input[type="date"] {
   max-width: 100%;
   box-sizing: border-box;
   min-width: 0;
+  /* Fix for iOS date input display */
+  -webkit-appearance: none;
+  -moz-appearance: textfield;
+  /* Ensure consistent padding across browsers */
+  padding: 10px 12px;
+}
+
+/* Additional iOS date input fixes */
+input[type="date"]::-webkit-date-and-time-value {
+  text-align: left;
+}
+
+input[type="date"]::-webkit-calendar-picker-indicator {
+  padding: 0;
+  margin: 0;
+  opacity: 1;
+  cursor: pointer;
+}
+
+/* Firefox date input fixes */
+input[type="date"]::-moz-calendar-picker-indicator {
+  padding: 0;
+  margin: 0;
+  opacity: 1;
+  cursor: pointer;
 }
 
 input::placeholder,
