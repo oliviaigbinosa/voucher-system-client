@@ -151,7 +151,7 @@ async function handleSubmit() {
   border-radius: var(--radius);
   border: 1px solid var(--border);
   background: var(--input-bg);
-  font-size: 14px;
+  font-size: 16px; /* Prevent iOS zoom on focus */
   color: var(--fg);
   outline: none;
   transition:
@@ -194,26 +194,69 @@ async function handleSubmit() {
   text-align: center;
 }
 
-@media (max-width: 480px) {
+@media (max-width: 768px) {
+  /* Make content smaller and more compact on small screens */
   .forgot-card {
-    padding: 24px 16px;
-    min-height: auto;
+    padding: 16px 12px;
+    transform: scale(0.95);
+    transform-origin: center center;
   }
 
   .forgot-title {
     font-size: 20px;
-    transform: none;
-    margin-top: 0;
+    margin-bottom: 6px;
   }
 
   .forgot-label {
-    margin: 32px 0 4px;
-    transform: none;
+    font-size: 12px;
+    margin: 16px 0 4px;
   }
 
   .email-field input {
-    padding: 10px 12px 10px 38px;
-    font-size: 13px;
+    padding: 8px 12px 8px 36px;
+    font-size: 16px; /* Prevent iOS zoom on focus */
+  }
+
+  .email-icon {
+    left: 12px;
+  }
+
+  .email-icon svg {
+    width: 16px;
+    height: 16px;
+  }
+
+  .login-submit {
+    padding: 10px 16px;
+    font-size: 14px;
+  }
+
+  .forgot-link {
+    font-size: 12px;
+  }
+}
+
+@media (max-width: 480px) {
+  /* Make content even smaller on mobile screens */
+  .forgot-card {
+    padding: 12px 8px;
+    transform: scale(0.9);
+    transform-origin: center center;
+  }
+
+  .forgot-title {
+    font-size: 18px;
+    margin-bottom: 4px;
+  }
+
+  .forgot-label {
+    font-size: 11px;
+    margin: 12px 0 3px;
+  }
+
+  .email-field input {
+    padding: 6px 10px 6px 32px;
+    font-size: 16px; /* Prevent iOS zoom on focus */
   }
 
   .email-icon {
@@ -221,8 +264,17 @@ async function handleSubmit() {
   }
 
   .email-icon svg {
-    width: 16px;
-    height: 16px;
+    width: 14px;
+    height: 14px;
+  }
+
+  .login-submit {
+    padding: 8px 12px;
+    font-size: 13px;
+  }
+
+  .forgot-link {
+    font-size: 11px;
   }
 }
 </style>

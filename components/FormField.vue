@@ -109,3 +109,28 @@ function handleChange(e) {
 
 </script>
 
+<style scoped>
+/* Prevent iOS zoom on input focus */
+.field input,
+.field textarea,
+.field select {
+  font-size: 16px;
+}
+
+@media (max-width: 768px) {
+  .field input,
+  .field textarea,
+  .field select {
+    font-size: 16px; /* Prevent iOS zoom on focus */
+  }
+}
+
+@media (max-width: 480px) {
+  .field input,
+  .field textarea,
+  .field select {
+    font-size: 16px; /* Prevent iOS zoom on focus */
+  }
+}
+</style>
+

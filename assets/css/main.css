@@ -2107,7 +2107,7 @@ router-link {
   textarea,
   select {
     padding: 9px 12px;
-    font-size: 14px;
+    font-size: 16px; /* Prevent iOS zoom on focus */
   }
 
   /* ── Buttons ─────────────────────────────────────────────── */
@@ -2427,7 +2427,7 @@ router-link {
   textarea,
   select {
     padding: 8px 10px;
-    font-size: 13px;
+    font-size: 16px; /* Prevent iOS zoom on focus */
   }
 
   /* ── Buttons ─────────────────────────────────────────────── */
