@@ -167,6 +167,7 @@
 @media (max-width: 480px) {
   .logout-success-block {
     padding: 8px 12px;
+    border-radius: 8px;
   }
 
   .logout-success-text {
@@ -174,9 +175,18 @@
     white-space: normal;
   }
 
-  /* Match login background to card background on smallest screens */
+  /* Make login card fill entire page on smallest screens */
   .login-wrap {
     background: var(--card);
+    flex-direction: column;
+    padding: 0;
+  }
+
+  .login-card {
+    background: transparent;
+    border: none;
+    border-radius: 0;
+    box-shadow: none;
   }
 }
 
@@ -254,9 +264,22 @@
     text-align: left;
   }
 
-  /* Match login background to card background on smaller screens */
+  .logout-success-block {
+    border-radius: 8px;
+  }
+
+  /* Make login card fill entire page on smaller screens */
   .login-wrap {
     background: var(--card);
+    flex-direction: column;
+    padding: 0;
+  }
+
+  .login-card {
+    background: transparent;
+    border: none;
+    border-radius: 0;
+    box-shadow: none;
   }
 }
 </style>

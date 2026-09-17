@@ -1777,12 +1777,19 @@ textarea {
     font-size: 18px;
   }
 
-  .login-card {
-    padding: 28px 20px;
-  }
-
   .login-wrap {
     background: var(--card);
+    flex-direction: column;
+    padding: 0;
+  }
+
+  .login-card {
+    padding: 28px 20px;
+    background: transparent;
+    border: none;
+    border-radius: 0;
+    max-width: 100%;
+    box-shadow: none;
   }
 }
 a,
@@ -2193,10 +2200,16 @@ router-link {
   .login-wrap {
     padding: 16px 12px;
     background: var(--card);
+    flex-direction: column;
   }
 
   .login-card {
     padding: 28px 20px;
+    background: transparent;
+    border: none;
+    border-radius: 0;
+    max-width: 100%;
+    box-shadow: none;
   }
 
   .login-card__title {
@@ -2660,10 +2673,17 @@ router-link {
   /* ── Login page ──────────────────────────────────────────── */
   .login-wrap {
     background: var(--card);
+    flex-direction: column;
+    padding: 0;
   }
 
   .login-card {
     padding: 20px 14px;
+    background: transparent;
+    border: none;
+    border-radius: 0;
+    max-width: 100%;
+    box-shadow: none;
   }
 
   .login-card__title {
