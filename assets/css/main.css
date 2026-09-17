@@ -302,6 +302,14 @@ select {
   outline: none;
 }
 
+/* Ensure date inputs fit within their containers */
+input[type="date"] {
+  width: 100%;
+  max-width: 100%;
+  box-sizing: border-box;
+  min-width: 0;
+}
+
 input::placeholder,
 textarea::placeholder {
   color: var(--muted-fg);
@@ -2192,6 +2200,11 @@ router-link {
     gap: 14px;
   }
 
+  /* Prevent iOS zoom on input focus */
+  .login-form input {
+    font-size: 16px;
+  }
+
   /* ── Page wrapper ────────────────────────────────────────── */
   .page-wrap {
     padding: 20px 14px;
@@ -2500,6 +2513,11 @@ router-link {
 
   .login-form {
     gap: 12px;
+  }
+
+  /* Prevent iOS zoom on input focus */
+  .login-form input {
+    font-size: 16px;
   }
 
   /* ── Page wrapper ────────────────────────────────────────── */

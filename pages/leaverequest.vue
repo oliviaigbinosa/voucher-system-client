@@ -1265,6 +1265,7 @@ async function submitLeave() {
   max-width: 100%;
   box-sizing: border-box;
   min-width: 0;
+  padding: 10px 12px;
 }
 
 /* Ensure field containers respect grid constraints */
@@ -1753,6 +1754,8 @@ async function submitLeave() {
   white-space: nowrap;
   font-size: 13px;
   transform: translateY(-4px);
+  flex-shrink: 0;
+  min-width: fit-content;
 }
 
 @media (max-width: 768px) {
