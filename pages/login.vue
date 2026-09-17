@@ -163,59 +163,59 @@
     font-size: 13px;
   }
 
-  /* Zoom in effect for small screens */
+  /* Make content smaller and more compact on small screens */
   .login-card {
-    padding: 24px 20px;
-    transform: scale(1.05);
+    padding: 16px 12px;
+    transform: scale(0.95);
     transform-origin: center center;
   }
 
   .login-card__logo {
-    margin-bottom: 8px;
+    margin-bottom: 6px;
   }
 
   .login-card__company {
-    font-size: 14px;
-    margin-bottom: 8px;
+    font-size: 12px;
+    margin-bottom: 6px;
   }
 
   .login-card__title {
-    font-size: 28px;
-    margin-bottom: 4px;
+    font-size: 20px;
+    margin-bottom: 2px;
   }
 
   .login-card__sub {
-    font-size: 16px;
-    margin-bottom: 24px;
+    font-size: 13px;
+    margin-bottom: 16px;
   }
 
   .login-form {
-    gap: 16px;
+    gap: 12px;
   }
 
   .forgot-link {
-    font-size: 14px;
-    margin: -8px 0 8px;
+    font-size: 12px;
+    margin: -4px 0 4px;
   }
 
   .login-submit {
-    padding: 14px 24px;
-    font-size: 16px;
+    padding: 10px 16px;
+    font-size: 14px;
   }
 
   .testing-section {
-    margin-top: 20px;
-    padding: 16px 20px 0;
+    margin-top: 16px;
+    padding: 12px 12px 0;
   }
 
   .testing-text {
-    font-size: 14px;
-    margin-bottom: 10px;
+    font-size: 11px;
+    margin-bottom: 8px;
   }
 
   .testing-btn {
-    font-size: 13px;
-    padding: 10px 14px;
+    font-size: 11px;
+    padding: 6px 10px;
   }
 }
 
@@ -230,59 +230,59 @@
     white-space: normal;
   }
 
-  /* Enhanced zoom effect for smallest screens */
+  /* Make content even smaller on mobile screens */
   .login-card {
-    padding: 20px 16px;
-    transform: scale(1.1);
+    padding: 12px 8px;
+    transform: scale(0.9);
     transform-origin: center center;
   }
 
   .login-card__logo {
-    margin-bottom: 6px;
-  }
-
-  .login-card__company {
-    font-size: 13px;
-    margin-bottom: 6px;
-  }
-
-  .login-card__title {
-    font-size: 26px;
     margin-bottom: 4px;
   }
 
+  .login-card__company {
+    font-size: 11px;
+    margin-bottom: 4px;
+  }
+
+  .login-card__title {
+    font-size: 18px;
+    margin-bottom: 2px;
+  }
+
   .login-card__sub {
-    font-size: 15px;
-    margin-bottom: 20px;
+    font-size: 12px;
+    margin-bottom: 12px;
   }
 
   .login-form {
-    gap: 14px;
+    gap: 10px;
   }
 
   .forgot-link {
-    font-size: 13px;
-    margin: -6px 0 6px;
+    font-size: 11px;
+    margin: -3px 0 3px;
   }
 
   .login-submit {
-    padding: 12px 20px;
-    font-size: 15px;
+    padding: 8px 12px;
+    font-size: 13px;
   }
 
   .testing-section {
-    margin-top: 16px;
-    padding: 14px 16px 0;
+    margin-top: 12px;
+    padding: 10px 8px 0;
   }
 
   .testing-text {
-    font-size: 13px;
-    margin-bottom: 8px;
+    font-size: 10px;
+    margin-bottom: 6px;
   }
 
   .testing-btn {
-    font-size: 12px;
-    padding: 8px 12px;
+    font-size: 10px;
+    padding: 5px 8px;
   }
 }
 
