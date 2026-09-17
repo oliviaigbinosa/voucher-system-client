@@ -162,6 +162,61 @@
   .logout-success-text {
     font-size: 13px;
   }
+
+  /* Zoom in effect for small screens */
+  .login-card {
+    padding: 24px 20px;
+    transform: scale(1.05);
+    transform-origin: center center;
+  }
+
+  .login-card__logo {
+    margin-bottom: 8px;
+  }
+
+  .login-card__company {
+    font-size: 14px;
+    margin-bottom: 8px;
+  }
+
+  .login-card__title {
+    font-size: 28px;
+    margin-bottom: 4px;
+  }
+
+  .login-card__sub {
+    font-size: 16px;
+    margin-bottom: 24px;
+  }
+
+  .login-form {
+    gap: 16px;
+  }
+
+  .forgot-link {
+    font-size: 14px;
+    margin: -8px 0 8px;
+  }
+
+  .login-submit {
+    padding: 14px 24px;
+    font-size: 16px;
+  }
+
+  .testing-section {
+    margin-top: 20px;
+    padding: 16px 20px 0;
+  }
+
+  .testing-text {
+    font-size: 14px;
+    margin-bottom: 10px;
+  }
+
+  .testing-btn {
+    font-size: 13px;
+    padding: 10px 14px;
+  }
 }
 
 @media (max-width: 480px) {
@@ -175,18 +230,59 @@
     white-space: normal;
   }
 
-  /* Make login card fill entire page on smallest screens */
-  .login-wrap {
-    background: var(--card);
-    flex-direction: column;
-    padding: 0;
+  /* Enhanced zoom effect for smallest screens */
+  .login-card {
+    padding: 20px 16px;
+    transform: scale(1.1);
+    transform-origin: center center;
   }
 
-  .login-card {
-    background: transparent;
-    border: none;
-    border-radius: 0;
-    box-shadow: none;
+  .login-card__logo {
+    margin-bottom: 6px;
+  }
+
+  .login-card__company {
+    font-size: 13px;
+    margin-bottom: 6px;
+  }
+
+  .login-card__title {
+    font-size: 26px;
+    margin-bottom: 4px;
+  }
+
+  .login-card__sub {
+    font-size: 15px;
+    margin-bottom: 20px;
+  }
+
+  .login-form {
+    gap: 14px;
+  }
+
+  .forgot-link {
+    font-size: 13px;
+    margin: -6px 0 6px;
+  }
+
+  .login-submit {
+    padding: 12px 20px;
+    font-size: 15px;
+  }
+
+  .testing-section {
+    margin-top: 16px;
+    padding: 14px 16px 0;
+  }
+
+  .testing-text {
+    font-size: 13px;
+    margin-bottom: 8px;
+  }
+
+  .testing-btn {
+    font-size: 12px;
+    padding: 8px 12px;
   }
 }
 
@@ -266,20 +362,6 @@
 
   .logout-success-block {
     border-radius: 8px;
-  }
-
-  /* Make login card fill entire page on smaller screens */
-  .login-wrap {
-    background: var(--card);
-    flex-direction: column;
-    padding: 0;
-  }
-
-  .login-card {
-    background: transparent;
-    border: none;
-    border-radius: 0;
-    box-shadow: none;
   }
 }
 </style>
