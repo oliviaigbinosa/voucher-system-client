@@ -173,6 +173,11 @@
     font-size: 12px;
     white-space: normal;
   }
+
+  /* Match login background to card background on smallest screens */
+  .login-wrap {
+    background: var(--card);
+  }
 }
 
 .testing-section {
@@ -247,6 +252,11 @@
     transform: translate(0, 0);
     margin: 8px 0 12px 0;
     text-align: left;
+  }
+
+  /* Match login background to card background on smaller screens */
+  .login-wrap {
+    background: var(--card);
   }
 }
 </style>

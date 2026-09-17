@@ -1274,6 +1274,14 @@ async function submitLeave() {
   width: 100%;
 }
 
+/* Ensure date inputs never overflow their containers */
+.form-grid .field input[type="date"] {
+  width: 100%;
+  max-width: 100%;
+  box-sizing: border-box;
+  min-width: 0;
+}
+
 .full-width {
   grid-column: 1 / -1;
 }
@@ -1385,7 +1393,15 @@ async function submitLeave() {
   .form-grid input[type="date"] {
     width: 100%;
     min-width: 0;
+    max-width: 100%;
+    box-sizing: border-box;
     font-size: 16px; /* Prevent iOS zoom on focus */
+  }
+
+  /* Ensure field containers respect constraints on mobile */
+  .form-grid .field {
+    min-width: 0;
+    width: 100%;
   }
 }
 
@@ -1590,6 +1606,7 @@ async function submitLeave() {
   gap: 12px;
   padding: 10px 16px;
   border-bottom: 1px solid var(--border);
+  min-width: 0;
 }
 
 .filter-input {
@@ -1662,6 +1679,7 @@ async function submitLeave() {
   border-bottom: none;
   padding: 0;
   flex: 1 1 100%;
+  min-width: 0;
 }
 
 .leave-badge {
@@ -1745,7 +1763,7 @@ async function submitLeave() {
 
 .admin-filter-field {
   flex: 1 1 0;
-  min-width: 180px;
+  min-width: 0;
 }
 
 .filter-row .admin-filter-clear {
@@ -1791,6 +1809,13 @@ async function submitLeave() {
   .form-grid input[type="date"] {
     width: 100%;
     min-width: 0;
+    max-width: 100%;
+    box-sizing: border-box;
+  }
+
+  .form-grid .field {
+    min-width: 0;
+    width: 100%;
   }
 }
 
@@ -1808,11 +1833,14 @@ async function submitLeave() {
   .form-grid input[type="date"] {
     width: 100%;
     min-width: 0;
+    max-width: 100%;
+    box-sizing: border-box;
     padding: 8px 10px;
   }
 
   .form-grid .field {
     min-width: 0;
+    width: 100%;
   }
 }
 </style>

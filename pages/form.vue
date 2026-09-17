@@ -303,6 +303,22 @@
   </div>
 </template>
 
+<style scoped>
+/* Ensure date inputs fit within their containers */
+.step-card input[type="date"] {
+  width: 100%;
+  max-width: 100%;
+  box-sizing: border-box;
+  min-width: 0;
+}
+
+/* Ensure field containers respect constraints */
+.step-card .field {
+  min-width: 0;
+  width: 100%;
+}
+</style>
+
 <script setup>
 import { ref, reactive, computed, watch, onMounted, onBeforeUnmount } from 'vue'
 import { useRouter } from 'vue-router'
