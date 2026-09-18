@@ -1252,6 +1252,9 @@ textarea {
   padding: 60px 32px;
   gap: 12px;
   color: var(--muted-fg);
+  max-width: 1040px;
+  width: 100%;
+  box-sizing: border-box;
 }
 
 .vouchers-empty__title {

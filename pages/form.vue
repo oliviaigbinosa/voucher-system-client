@@ -346,26 +346,23 @@
 /* Ensure email and subject fields show full text on small screens */
 .step-card .field input[type="email"],
 .step-card .field input[type="text"] {
-  word-wrap: break-word;
-  overflow-wrap: break-word;
-  white-space: normal;
+  overflow: auto;
+  white-space: nowrap;
 }
 
 @media (max-width: 768px) {
   .step-card .field input[type="email"],
   .step-card .field input[type="text"] {
-    word-wrap: break-word;
-    overflow-wrap: break-word;
-    white-space: normal;
+    overflow: auto;
+    white-space: nowrap;
   }
 }
 
 @media (max-width: 480px) {
   .step-card .field input[type="email"],
   .step-card .field input[type="text"] {
-    word-wrap: break-word;
-    overflow-wrap: break-word;
-    white-space: normal;
+    overflow: auto;
+    white-space: nowrap;
   }
 }
 </style>

@@ -1570,8 +1570,7 @@ async function submitLeave() {
 }
 
 .content .vouchers-empty {
-  max-width: 1040px;
-  padding: 60px 32px;
+  max-width: 90%;
   margin-bottom: 0;
   margin-left: auto;
   margin-right: auto;
