@@ -225,6 +225,14 @@ async function fetchUnreadCount() {
 }
 
 onMounted(() => {
+  // Preload logo image
+  const link = document.createElement('link')
+  link.rel = 'preload'
+  link.href = '/logo.svg'
+  link.as = 'image'
+  link.type = 'image/svg+xml'
+  document.head.appendChild(link)
+
   fetchUnreadCount()
   window.addEventListener('inbox-updated', fetchUnreadCount)
 })

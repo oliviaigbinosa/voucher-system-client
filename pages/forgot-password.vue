@@ -56,7 +56,10 @@ import { ref } from 'vue'
 import { API_BASE } from '~/composables/appState'
 
 useHead({
-  link: [{ rel: 'icon', type: 'image/svg+xml', href: '/logo.svg' }],
+  link: [
+    { rel: 'icon', type: 'image/svg+xml', href: '/logo.svg' },
+    { rel: 'preload', href: '/logo.svg', as: 'image', type: 'image/svg+xml' }
+  ],
 })
 
 const email = ref('')
@@ -208,7 +211,7 @@ async function handleSubmit() {
   }
 
   .forgot-label {
-    font-size: 12px;
+    font-size: 14px;
     margin: 16px 0 4px;
   }
 
@@ -250,7 +253,7 @@ async function handleSubmit() {
   }
 
   .forgot-label {
-    font-size: 11px;
+    font-size: 13px;
     margin: 12px 0 3px;
   }
 

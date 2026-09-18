@@ -373,7 +373,10 @@ import FormField from '../components/FormField.vue'
 import { API_BASE, loginUser, fetchVouchers, fetchLeaveRequests, fetchOnboardingUsers } from '~/composables/appState'
 
 useHead({
-  link: [{ rel: 'icon', type: 'image/svg+xml', href: '/logo.svg' }],
+  link: [
+    { rel: 'icon', type: 'image/svg+xml', href: '/logo.svg' },
+    { rel: 'preload', href: '/logo.svg', as: 'image', type: 'image/svg+xml' }
+  ],
 })
 
 const router = useRouter()

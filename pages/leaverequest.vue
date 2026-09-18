@@ -1659,9 +1659,13 @@ async function submitLeave() {
   transform: translateY(-14px);
 }
 .admin-filters {
+  display: flex;
+  align-items: flex-end;
+  gap: 16px;
   padding: 18px 20px;
   margin: 0 auto 16px;
   max-width: 1040px;
+  flex-wrap: wrap;
 }
 
 .status-wrap {
@@ -1762,10 +1766,6 @@ async function submitLeave() {
     gap: 4px;
   }
 
-  .admin-filter-field {
-    min-width: 140px;
-  }
-
   .dashboard-tabs {
     transform: translateY(-4px);
   }
@@ -1785,36 +1785,49 @@ async function submitLeave() {
 }
 
 .admin-filter-field {
-  flex: 1 1 0;
-  min-width: 0;
+  flex: 1;
+  min-width: 160px;
 }
 
 .filter-row .admin-filter-clear {
-  height: 34px;
-  padding: 0 12px;
-  white-space: nowrap;
-  font-size: 13px;
-  transform: translateY(-4px);
   flex-shrink: 0;
+  padding: 10px 16px;
+  font-size: 13px;
+  align-self: flex-end;
+  white-space: nowrap;
   min-width: fit-content;
-  max-width: 100%;
+  height: 34px;
+  transform: translateY(-2px);
 }
 
 @media (max-width: 768px) {
   .admin-filter-field {
-    min-width: 140px;
-    flex: 1 1 100%;
+    min-width: 0;
+    width: 100%;
   }
 
   .filter-row {
-    gap: 8px;
+    gap: 12px;
+    flex-direction: column;
+    align-items: stretch;
   }
 
   .filter-row .admin-filter-clear {
-    font-size: 12px;
-    padding: 0 10px;
-    height: 32px;
+    align-self: stretch;
+    text-align: center;
+    white-space: nowrap;
+    min-width: fit-content;
+    height: 34px;
+    padding: 0 16px;
+    font-size: 13px;
     transform: translateY(-2px);
+  }
+
+  .admin-filters {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 12px;
+    padding: 14px 16px;
   }
 }
 

@@ -1430,8 +1430,9 @@ async function handleRemoveUser(id) {
   font-size: 11.7px;
 }
 
-.onboarding-field input[type="email"] {
-  font-size: 13px;
+.onboarding-field input[type="email"],
+.onboarding-field input[type="text"] {
+  font-size: 16px; /* Prevent iOS zoom on focus */
 }
 
 .onboarding-field select {
