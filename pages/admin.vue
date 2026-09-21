@@ -1432,7 +1432,7 @@ async function handleRemoveUser(id) {
 
 .onboarding-field input[type="email"],
 .onboarding-field input[type="text"] {
-  font-size: 16px; /* Prevent iOS zoom on focus */
+  font-size: 14px;
 }
 
 .onboarding-field select {
@@ -1596,6 +1596,11 @@ async function handleRemoveUser(id) {
     width: 100%;
   }
 
+  .onboarding-field input[type="email"],
+  .onboarding-field input[type="text"] {
+    font-size: 16px;
+  }
+
   .onboarding-submit {
     align-self: stretch;
   }
@@ -1620,6 +1625,11 @@ async function handleRemoveUser(id) {
     max-width: 80px;
     -webkit-line-clamp: 1;
     line-clamp: 1;
+  }
+
+  .onboarding-field input[type="email"],
+  .onboarding-field input[type="text"] {
+    font-size: 16px;
   }
 }
 

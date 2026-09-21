@@ -1690,7 +1690,7 @@ async function submitLeave() {
 @media (max-width: 768px) {
   .admin-filters {
     max-width: 100%;
-    margin: 0 16px 16px;
+    margin: 0 auto 16px;
   }
 }
 
