@@ -1570,11 +1570,29 @@ async function submitLeave() {
 }
 
 .content .vouchers-empty {
-  max-width: 90%;
+  max-width: 1040px;
+  padding: 60px 32px;
   margin-bottom: 0;
   margin-left: auto;
   margin-right: auto;
   border-radius: 0;
+}
+
+/* Reduce width of empty state card on small devices */
+@media (max-width: 768px) {
+  .content .vouchers-empty {
+    max-width: 100%;
+    padding: 40px 24px;
+    margin: 0 16px;
+  }
+}
+
+@media (max-width: 480px) {
+  .content .vouchers-empty {
+    max-width: 100%;
+    padding: 32px 20px;
+    margin: 0 12px;
+  }
 }
 
 .content .vouchers-table th,

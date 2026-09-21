@@ -90,6 +90,7 @@
               type="email"
               placeholder="your-name@getpayedmail.com"
               readonly
+              input-class="full-text-field"
             />
             <FormField
               v-if="!isAdmin"
@@ -123,6 +124,7 @@
               placeholder="Petty Cash Request — Department — Month Year"
               :error="errors.subject"
               @input="clearErr('subject')"
+              input-class="full-text-field"
             />
           </div>
         </template>
@@ -343,25 +345,21 @@
   width: 100%;
 }
 
-/* Ensure email and subject fields show full text on small screens */
-.step-card .field input[type="email"],
-.step-card .field input[type="text"] {
-  overflow: auto;
+/* Ensure From email and Subject fields show full text on small screens by reducing font size */
+.step-card .field .full-text-field {
   white-space: nowrap;
 }
 
 @media (max-width: 768px) {
-  .step-card .field input[type="email"],
-  .step-card .field input[type="text"] {
-    overflow: auto;
+  .step-card .field .full-text-field {
+    font-size: 13px;
     white-space: nowrap;
   }
 }
 
 @media (max-width: 480px) {
-  .step-card .field input[type="email"],
-  .step-card .field input[type="text"] {
-    overflow: auto;
+  .step-card .field .full-text-field {
+    font-size: 11px;
     white-space: nowrap;
   }
 }

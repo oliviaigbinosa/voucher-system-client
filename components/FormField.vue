@@ -4,30 +4,35 @@
 
     <div v-if="(prefix || $slots.suffix) && !isTextarea && !isSelect" class="input-prefix">
       <span v-if="prefix" class="prefix">{{ prefix }}</span>
+      <div class="date-input-wrapper">
+        <input
+          :id="inputId"
+          :type="type"
+          :value="modelValue"
+          :placeholder="type === 'date' ? '' : placeholder"
+          :readonly="readonly"
+          :disabled="disabled"
+          :inputmode="inputmode || undefined"
+
+          @input="handleInput" :class="[inputClass, { 'error': !!error }]" />
+        <span v-if="type === 'date' && !modelValue" class="date-placeholder">mm/dd/yy</span>
+      </div>
+      <slot name="suffix" />
+    </div>
+
+    <div v-else-if="!isTextarea && !isSelect" class="date-input-wrapper">
       <input
         :id="inputId"
         :type="type"
         :value="modelValue"
-        :placeholder="type === 'date' ? 'mm/dd/yy' : placeholder"
+        :placeholder="type === 'date' ? '' : placeholder"
         :readonly="readonly"
         :disabled="disabled"
         :inputmode="inputmode || undefined"
 
         @input="handleInput" :class="[inputClass, { 'error': !!error }]" />
-      <slot name="suffix" />
+      <span v-if="type === 'date' && !modelValue" class="date-placeholder">mm/dd/yy</span>
     </div>
-
-    <input
-      v-else-if="!isTextarea && !isSelect"
-      :id="inputId"
-      :type="type"
-      :value="modelValue"
-      :placeholder="type === 'date' ? 'mm/dd/yy' : placeholder"
-      :readonly="readonly"
-      :disabled="disabled"
-      :inputmode="inputmode || undefined"
-
-      @input="handleInput" :class="[inputClass, { 'error': !!error }]" />
 
     <select
       v-else-if="isSelect"
@@ -110,6 +115,28 @@ function handleChange(e) {
 </script>
 
 <style scoped>
+/* Date input wrapper for placeholder */
+.date-input-wrapper {
+  position: relative;
+}
+
+.date-placeholder {
+  position: absolute;
+  left: 12px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: var(--muted-fg);
+  pointer-events: none;
+  font-size: 14px;
+  z-index: 1;
+  white-space: nowrap;
+}
+
+/* Hide placeholder when input has value */
+.date-input-wrapper input:not(:placeholder-shown) + .date-placeholder {
+  display: none;
+}
+
 /* Date input specific fixes */
 .field input[type="date"] {
   /* Fix for iOS date input display */
@@ -150,6 +177,21 @@ function handleChange(e) {
   .field textarea,
   .field select {
     font-size: 16px; /* Prevent iOS zoom on focus */
+  }
+
+  /* Ensure date placeholder is visible on mobile */
+  .date-placeholder {
+    font-size: 14px;
+    left: 10px;
+  }
+
+  /* Hide default date placeholder on mobile */
+  .field input[type="date"]::-webkit-datetime-edit {
+    color: transparent;
+  }
+
+  .field input[type="date"]:not(:placeholder-shown)::-webkit-datetime-edit {
+    color: var(--fg);
   }
 }
 </style>
