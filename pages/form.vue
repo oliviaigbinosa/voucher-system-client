@@ -313,6 +313,7 @@
   box-sizing: border-box;
   min-width: 0;
   /* Fix for iOS date input display */
+  appearance: none;
   -webkit-appearance: none;
   -moz-appearance: textfield;
   /* Ensure consistent padding across browsers */
@@ -345,22 +346,35 @@
   width: 100%;
 }
 
-/* Ensure From email and Subject fields show full text on small screens by reducing font size */
-.step-card .field .full-text-field {
+/* Ensure From email readonly field shows full text on small screens by reducing font size */
+.step-card .field input[readonly].full-text-field {
   white-space: nowrap;
 }
 
+/* Ensure subject field can scroll horizontally on small devices */
+.step-card .field input.full-text-field {
+  overflow-x: auto;
+}
+
 @media (max-width: 768px) {
-  .step-card .field .full-text-field {
+  .step-card .field input[readonly].full-text-field {
     font-size: 13px;
     white-space: nowrap;
+  }
+
+  .step-card .field input.full-text-field {
+    overflow-x: auto;
   }
 }
 
 @media (max-width: 480px) {
-  .step-card .field .full-text-field {
+  .step-card .field input[readonly].full-text-field {
     font-size: 11px;
     white-space: nowrap;
+  }
+
+  .step-card .field input.full-text-field {
+    overflow-x: auto;
   }
 }
 </style>

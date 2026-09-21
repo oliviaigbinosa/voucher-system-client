@@ -509,7 +509,7 @@
       <template v-else>
       <div class="vouchers-table-wrap card">
 
-        <div v-if="!displayedLeaveRequests.length" class="vouchers-empty">
+        <div v-if="!displayedLeaveRequests.length" class="vouchers-empty card">
           <p class="vouchers-empty__title">No leave requests</p>
           <p class="vouchers-empty__sub">{{ isHr ? 'Leave requests from all employees will appear here.' : (shouldShowAdminUi ? 'Leave requests from you and department members will appear here.' : 'Your leave requests will appear here.') }}</p>
         </div>
@@ -1267,6 +1267,7 @@ async function submitLeave() {
   min-width: 0;
   padding: 10px 12px;
   /* Fix for iOS date input display */
+  appearance: none;
   -webkit-appearance: none;
   -moz-appearance: textfield;
 }
@@ -1566,32 +1567,46 @@ async function submitLeave() {
   margin-left: auto;
   margin-right: auto;
   overflow-y: hidden;
-  border-radius: 0;
+  border-radius: 22px;
+}
+
+@media (max-width: 768px) {
+  .content .vouchers-table-wrap {
+    max-width: calc(100% - 32px);
+    margin: 0 16px 20px;
+  }
+}
+
+@media (max-width: 480px) {
+  .content .vouchers-table-wrap {
+    max-width: calc(100% - 24px);
+    margin: 0 12px 20px;
+  }
 }
 
 .content .vouchers-empty {
   max-width: 1040px;
   padding: 60px 32px;
-  margin-bottom: 0;
+  margin-bottom: 20px;
   margin-left: auto;
   margin-right: auto;
-  border-radius: 0;
+  border-radius: 22px;
 }
 
 /* Reduce width of empty state card on small devices */
 @media (max-width: 768px) {
   .content .vouchers-empty {
-    max-width: 100%;
+    max-width: calc(100% - 32px);
     padding: 40px 24px;
-    margin: 0 16px;
+    margin: 0 16px 20px;
   }
 }
 
 @media (max-width: 480px) {
   .content .vouchers-empty {
-    max-width: 100%;
+    max-width: calc(100% - 24px);
     padding: 32px 20px;
-    margin: 0 12px;
+    margin: 0 12px 20px;
   }
 }
 
@@ -1683,6 +1698,13 @@ async function submitLeave() {
   margin: 0 auto 16px;
   max-width: 1040px;
   flex-wrap: wrap;
+}
+
+@media (max-width: 768px) {
+  .admin-filters {
+    max-width: 100%;
+    margin: 0 16px 16px;
+  }
 }
 
 .status-wrap {

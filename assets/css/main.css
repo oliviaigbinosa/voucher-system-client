@@ -314,6 +314,7 @@ input[type="date"] {
   box-sizing: border-box;
   min-width: 0;
   /* Fix for iOS date input display */
+  appearance: none;
   -webkit-appearance: none;
   -moz-appearance: textfield;
   /* Ensure consistent padding across browsers */
