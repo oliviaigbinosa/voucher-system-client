@@ -509,7 +509,7 @@
       <template v-else>
       <div class="vouchers-table-wrap card">
 
-        <div v-if="!displayedLeaveRequests.length" class="vouchers-empty card">
+        <div v-if="!displayedLeaveRequests.length" class="vouchers-empty">
           <p class="vouchers-empty__title">No leave requests</p>
           <p class="vouchers-empty__sub">{{ isHr ? 'Leave requests from all employees will appear here.' : (shouldShowAdminUi ? 'Leave requests from you and department members will appear here.' : 'Your leave requests will appear here.') }}</p>
         </div>
@@ -1567,46 +1567,33 @@ async function submitLeave() {
   margin-left: auto;
   margin-right: auto;
   overflow-y: hidden;
-  border-radius: 22px;
-}
+  border-radius: 0;
 
-@media (max-width: 768px) {
-  .content .vouchers-table-wrap {
-    max-width: calc(100% - 32px);
-    margin: 0 16px 20px;
-  }
-}
-
-@media (max-width: 480px) {
-  .content .vouchers-table-wrap {
-    max-width: calc(100% - 24px);
-    margin: 0 12px 20px;
-  }
 }
 
 .content .vouchers-empty {
   max-width: 1040px;
   padding: 60px 32px;
-  margin-bottom: 20px;
+  margin-bottom: 0;
   margin-left: auto;
   margin-right: auto;
-  border-radius: 22px;
+  border-radius: 0;
 }
 
 /* Reduce width of empty state card on small devices */
 @media (max-width: 768px) {
   .content .vouchers-empty {
-    max-width: calc(100% - 32px);
+    max-width: 1000%;
     padding: 40px 24px;
-    margin: 0 16px 20px;
+    margin: 0 16px;
   }
 }
 
 @media (max-width: 480px) {
   .content .vouchers-empty {
-    max-width: calc(100% - 24px);
+    max-width: 100%;
     padding: 32px 20px;
-    margin: 0 12px 20px;
+    margin: 0 12px;
   }
 }
 

@@ -98,7 +98,7 @@ async function handleSubmit() {
     message.value = 'A reset link has been sent to your email. Please check your inbox.'
     email.value = ''
   } catch {
-    error.value = 'Could not send reset link. Please check your network connection'
+    error.value = 'Could not send reset link. Request failed'
   } finally {
     loading.value = false
   }

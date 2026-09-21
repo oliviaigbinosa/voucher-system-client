@@ -197,7 +197,7 @@ async function handleSubmit() {
 
     success.value = true
   } catch {
-    errors.general = 'Could not reset password. Please check your network connection'
+    errors.general = 'Could not reset password. Request failed'
   } finally {
     loading.value = false
   }

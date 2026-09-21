@@ -347,24 +347,16 @@
 }
 
 /* Ensure From email readonly field shows full text on small screens by reducing font size */
-.step-card .field input[readonly].full-text-field {
+.step-card .field .full-text-field {
   white-space: nowrap;
 }
 
-/* Ensure subject field can scroll horizontally on small devices */
-.step-card .field input.full-text-field {
-  overflow-x: auto;
-}
-
 @media (max-width: 768px) {
-  .step-card .field input[readonly].full-text-field {
+  .step-card .field .full-text-field {
     font-size: 13px;
     white-space: nowrap;
   }
 
-  .step-card .field input.full-text-field {
-    overflow-x: auto;
-  }
 }
 
 @media (max-width: 480px) {

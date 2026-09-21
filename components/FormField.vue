@@ -133,15 +133,8 @@ function handleChange(e) {
 }
 
 /* Hide placeholder when input has value */
-.date-input-wrapper input:not(:placeholder-shown) + .date-placeholder,
-.date-input-wrapper input:not(:placeholder-shown) ~ .date-placeholder {
+.date-input-wrapper input:not(:placeholder-shown) + .date-placeholder {
   display: none;
-}
-
-/* Ensure placeholder is visible when input is empty */
-.date-input-wrapper input:placeholder-shown + .date-placeholder,
-.date-input-wrapper input:placeholder-shown ~ .date-placeholder {
-  display: block;
 }
 
 /* Date input specific fixes */
@@ -202,10 +195,6 @@ function handleChange(e) {
     color: var(--fg);
   }
 
-  /* Ensure date placeholder shows on mobile when input is empty */
-  .date-input-wrapper input[type="date"]:placeholder-shown + .date-placeholder {
-    display: block;
-  }
 }
 </style>
 
