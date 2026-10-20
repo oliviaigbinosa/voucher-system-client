@@ -331,8 +331,8 @@ const isSuperAdmin = computed(() => userRole.value === 'super admin')
 const isAdminOrSuper = computed(() => userRole.value === 'admin' || userRole.value === 'super admin')
 const processingAction = ref('')
 const declineAction = ref('decline')
-const FINANCE_EMAIL = 'finance@getpayedmail.com'
-const FINANCE_MANAGER_EMAIL = 'finance.manager@getpayedmail.com'
+const FINANCE_EMAIL = 'finance@example.com'
+const FINANCE_MANAGER_EMAIL = 'finance.manager@example.com'
 
 const isFinanceRecipient = computed(() => {
   if (!selectedVoucher.value) return false

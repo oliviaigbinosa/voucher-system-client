@@ -463,9 +463,9 @@ async function quickLogin(role) {
   delete loginErrors.general
 
   const credentials = {
-    finance: { email: 'finance.manager@getpayedmail.com', password: 'Password!123' },
-    department_manager: { email: 'department.manager@getpayedmail.com', password: 'Password!123' },
-    department_member: { email: 'department.member@getpayedmail.com', password: 'Password!123' },
+    finance: { email: 'finance.manager@example.com', password: 'Password!123' },
+    department_manager: { email: 'department.manager@example.com', password: 'Password!123' },
+    department_member: { email: 'department.member@example.com', password: 'Password!123' },
   }
 
   loginForm.email = credentials[role].email

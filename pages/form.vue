@@ -88,7 +88,7 @@
               v-model="form.from"
               label="From (Sender Email)"
               type="email"
-              placeholder="your-name@getpayedmail.com"
+              placeholder="your-name@example.com"
               readonly
               input-class="full-text-field"
             />
@@ -97,7 +97,7 @@
               v-model="form.to"
               label="To (Recipient Email)"
               type="email"
-              placeholder="admin@getpayedmail.com"
+              placeholder="admin@example.com"
               readonly
             />
             <FormField
@@ -105,7 +105,7 @@
               v-model="form.to"
               label="To (Recipient Email)"
               type="email"
-              placeholder="finance@getpayedmail.com"
+              placeholder="finance@example.com"
               readonly
             />
             <FormField
@@ -113,7 +113,7 @@
               v-model="form.cc"
               label="CC (notified on approval)"
               type="email"
-              placeholder="finance@getpayedmail.com"
+              placeholder="finance@example.com"
               readonly
             />
             <FormField
@@ -380,11 +380,11 @@ import FormPreview from '../components/formpreview.vue'
 import FilePreview from '../components/FilePreview.vue'
 import { addVoucher, userEmail, userDepartment, userCreatedBy, userRole, fetchCurrentUser, isAdmin, onboardingUsers, fetchOnboardingUsers, allVouchers, loadingVouchers, API_BASE, fetchNextSerial } from '~/composables/appState'
 
-const FINANCE_EMAIL = 'finance@getpayedmail.com'
-const FINANCE_MANAGER_EMAIL = 'finance.manager@getpayedmail.com'
+const FINANCE_EMAIL = 'finance@example.com'
+const FINANCE_MANAGER_EMAIL = 'finance.manager@example.com'
 
 function defaultToEmail() {
-  if (String(userEmail.value || '').toLowerCase() === 'department.member@getpayedmail.com') return 'department.manager@getpayedmail.com'
+  if (String(userEmail.value || '').toLowerCase() === 'department.member@example.com') return 'department.manager@example.com'
   return FINANCE_EMAIL
 }
 
@@ -642,8 +642,8 @@ const validators = {
     const e = {}
     if (!isEmail(form.to)) {
       e.to = 'Valid recipient email required'
-    } else if (!form.to.endsWith('@getpayedmail.com')) {
-      e.to = 'Email must be a @getpayedmail.com address'
+    } else if (!form.to.endsWith('@example.com')) {
+      e.to = 'Email must be a @example.com address'
     }
     if (!form.subject.trim()) e.subject = 'Subject is required'
     return e

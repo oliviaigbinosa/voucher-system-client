@@ -190,9 +190,10 @@ async function fetchOnboardingUsers() {
   if (!res.ok) {
     throw new Error('Failed to load users')
   }
+
   const users = await res.json()
-  const demoManager = 'department.manager@getpayedmail.com'
-  const demoMember = 'department.member@getpayedmail.com'
+  const demoManager = 'department.manager@example.com'
+  const demoMember = 'department.member@example.com'
   let list: any[] = Array.isArray(users) ? users.slice() : []
   // If current user is department manager, only ensure the member is present
   if (String(userEmail.value || '').toLowerCase() === demoManager) {

@@ -949,7 +949,7 @@ onMounted(async () => {
 const adminFilter = reactive({ dept: '', user: '', status: '' })
 
 const displayedOnboardingUsers = computed(() => {
-  const FINANCE_MANAGER_EMAIL = 'finance.manager@getpayedmail.com'
+  const FINANCE_MANAGER_EMAIL = 'finance.manager@example.com'
   const filtered = onboardingUsers.value.filter((user) => {
     const u = String(user.email || '').toLowerCase()
     return u !== FINANCE_MANAGER_EMAIL
@@ -1263,7 +1263,7 @@ async function handleAddUser() {
   if (!onboardForm.email) {
     onboardErrors.email = 'Email is required'
   } else if (!/@getpayedmail\.com$/.test(onboardForm.email)) {
-    onboardErrors.email = 'Email must end with @getpayedmail.com'
+    onboardErrors.email = 'Email must end with @example.com'
   } else if (!/^[^\s@.]+\.[^\s@.]+@getpayedmail\.com$/.test(onboardForm.email)) {
     onboardErrors.email = 'Enter a valid email'
   }

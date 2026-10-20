@@ -89,7 +89,7 @@
   placeholder="Enter department manager email"
   :readonly="!isAdmin || (isSuperAdmin && !isFinanceManager) || shouldUseDepartmentManagerEmail(userEmail) || shouldForceFinanceManagerForDepartment(userEmail)"
   :error="errors.departmentManager"
-  :hint="isFinanceManager ? 'Test with department.manager@getpayedmail.com' : ''"
+  :hint="isFinanceManager ? 'Test with department.manager@example.com' : ''"
   @input="clearErr('departmentManager')"
 />
 
@@ -640,7 +640,7 @@ import {
 } from '~/composables/appState'
 import VoucherTableSkeleton from '../components/VoucherTableSkeleton.vue'
 
-const FINANCE_MANAGER_EMAIL = 'finance.manager@getpayedmail.com'
+const FINANCE_MANAGER_EMAIL = 'finance.manager@example.com'
 const showPreview = ref(false)
 const showFilePreview = ref(false)
 const previewFile = ref(null)
@@ -650,15 +650,15 @@ const submitted = ref(false)
 const submittedEmployee = ref('')
 const isSuperAdmin = computed(() => userRole.value === 'super admin')
 const isFinanceManager = computed(() => String(userEmail.value || '').toLowerCase() === FINANCE_MANAGER_EMAIL)
-const isHr = computed(() => String(userEmail.value || '').toLowerCase() === 'hr@getpayedmail.com')
+const isHr = computed(() => String(userEmail.value || '').toLowerCase() === 'hr@example.com')
 const shouldForceFinanceManagerForDepartment = (email) => {
   const normalizedEmail = String(email || '').toLowerCase()
-  return normalizedEmail === 'department.manager@getpayedmail.com'
+  return normalizedEmail === 'department.manager@example.com'
 }
 
 const shouldUseDepartmentManagerEmail = (email) => {
   const normalizedEmail = String(email || '').toLowerCase()
-  return normalizedEmail === 'department.member@getpayedmail.com'
+  return normalizedEmail === 'department.member@example.com'
 }
 const shouldShowAdminUi = computed(() =>
   (isAdmin.value && !isSuperAdmin.value) || isFinanceManager.value || isHr.value,
@@ -691,7 +691,7 @@ const form = reactive({
 // Watch for user email changes to update department manager
 watch(userEmail, (newEmail) => {
   if (shouldUseDepartmentManagerEmail(newEmail)) {
-    form.departmentManager = 'department.manager@getpayedmail.com'
+    form.departmentManager = 'department.manager@example.com'
   } else if (shouldForceFinanceManagerForDepartment(newEmail)) {
     form.departmentManager = FINANCE_MANAGER_EMAIL
   }
@@ -786,7 +786,7 @@ async function confirmStatus() {
 
 const baseLeaveRequests = computed(() => {
   const myEmail = String(userEmail.value || '').toLowerCase()
-  const canViewAll = myEmail === 'hr@getpayedmail.com'
+  const canViewAll = myEmail === 'hr@example.com'
   const onboardedEmails = new Set(onboardingUsers.value.map((user) => String(user.email || '').toLowerCase()))
   if (isFinanceManager.value) {
     const financeMemberEmails = new Set(
@@ -889,7 +889,7 @@ async function validateManagerEmail(manager) {
     return { valid: false, error: 'Enter a valid email address' }
   }
   if (!/^[^\s@]+@getpayedmail\.com$/.test(managerEmail)) {
-    return { valid: false, error: 'Manager email must end with @getpayedmail.com' }
+    return { valid: false, error: 'Manager email must end with @example.com' }
   }
 
   try {
@@ -1074,7 +1074,7 @@ onMounted(async () => {
   }
   if (shouldUseDepartmentManagerEmail(userEmail.value)) {
     // Department member keeps the regular department manager email
-    form.departmentManager = 'department.manager@getpayedmail.com'
+    form.departmentManager = 'department.manager@example.com'
   } else if (shouldForceFinanceManagerForDepartment(userEmail.value)) {
     // Department manager is always routed to the finance manager
     form.departmentManager = FINANCE_MANAGER_EMAIL
@@ -1116,7 +1116,7 @@ function openFilePreview(file) {
 function resetForm() {
   let deptManager
   if (shouldUseDepartmentManagerEmail(userEmail.value)) {
-    deptManager = 'department.manager@getpayedmail.com'
+    deptManager = 'department.manager@example.com'
   } else if (shouldForceFinanceManagerForDepartment(userEmail.value)) {
     deptManager = FINANCE_MANAGER_EMAIL
   } else if (isFinanceManager.value) {

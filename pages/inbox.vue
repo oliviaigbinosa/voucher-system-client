@@ -106,8 +106,8 @@ async function fetchEmails() {
     // Keep finance inbox aligned with server-side routing.
     // For finance.manager we show all emails sent to that mailbox, except
     // department-member declined voucher notices that are intentionally excluded.
-    const FINANCE_EMAIL = 'finance.manager@getpayedmail.com'
-    const DEPT_MEMBER_EMAIL = 'department.member@getpayedmail.com'
+    const FINANCE_EMAIL = 'finance.manager@example.com'
+    const DEPT_MEMBER_EMAIL = 'department.member@example.com'
     const me = String(userEmail.value || '').toLowerCase()
     if (me === FINANCE_EMAIL) {
       fetched = fetched.filter((e) => {
