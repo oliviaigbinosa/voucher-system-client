@@ -92,7 +92,7 @@ async function handleSubmit() {
           senderEmail: 'pettyflo.support@example.com',
           senderName: 'PettyFlo Support',
           subject: 'Reset your Petty Cash Voucher password',
-          text: `Hello,\n\nYou requested a password reset for your Petty Cash Voucher account.\n\nClick the link below to set a new password:\nhttps://pettycashvoucher.netlify.app/reset-password?token=${resetToken}&email=${encodeURIComponent(email.value.trim().toLowerCase())}\n\nThis link will expire in 30 minutes. If you did not request this reset, please ignore this email.`,
+          text: `Hello,\n\nYou requested a password reset for your Petty Cash Voucher account.\n\nClick the link below to set a new password:\nhttps://voucher-system-client.netlify.app/reset-password?token=${resetToken}&email=${encodeURIComponent(email.value.trim().toLowerCase())}\n\nThis link will expire in 30 minutes. If you did not request this reset, please ignore this email.`,
           html: null,
           type: 'password-reset',
           relatedId: null,

@@ -8,7 +8,7 @@ const userDepartment = ref('')
 const userCreatedBy = ref('')
 const isLoggedIn = ref(false)
 const isAdmin = computed(() => userRole.value === 'admin' || userRole.value === 'super admin')
-const onboardDepts = ref<string[]>(['Finance', 'Product', 'Engineering', 'Operations', 'Commercials and partnerships', 'Compliance', 'People and culture', 'BI/Data & Retention'])
+const onboardDepts = ref<string[]>(['Finance', 'Operations' ])
 const allVouchers = ref<any[]>([])
 const loadingVouchers = ref(true)
 
