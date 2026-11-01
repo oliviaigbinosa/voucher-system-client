@@ -1,5 +1,5 @@
 # Petty Cash Voucher (PCV) System (Frontend) 
-**This repository contains the Nuxt/Vue frontend for the Petty Cash Voucher web app for a fintech company, Getpayed Technology Solutions Ltd**  <br> <br>
+**This repository contains the Nuxt/Vue frontend for the Petty Cash Voucher web app**  <br> <br>
 Live Demo: https://voucher-system-client.netlify.app <br> 
 Backend Repository: https://github.com/oliviaigbinosa/voucher-system-api
 ## Project Overview 
