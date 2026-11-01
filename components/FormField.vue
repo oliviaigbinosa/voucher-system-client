@@ -120,6 +120,10 @@ function handleChange(e) {
   position: relative;
 }
 
+.prefix {
+  z-index: 2;
+}
+
 .date-placeholder {
   position: absolute;
   left: 12px;

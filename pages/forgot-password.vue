@@ -2,7 +2,17 @@
   <div class="login-wrap">
     <div class="login-card forgot-card">
       <div class="login-card__logo">
-        <img src="/logo.svg" alt="Getpayed logo" width="40" height="40" />
+        <svg
+          width="40"
+          height="40"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="#1c3557"
+          stroke-width="2"
+        >
+          <rect x="2" y="7" width="20" height="14" rx="2" />
+          <path d="M16 7V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v2" />
+        </svg>
       </div>
       <h1 class="forgot-title">Forgot Password?</h1>
       
@@ -55,13 +65,6 @@ definePageMeta({ layout: false })
 import { ref } from 'vue'
 import { API_BASE } from '~/composables/appState'
 
-useHead({
-  link: [
-    { rel: 'icon', type: 'image/svg+xml', href: '/logo.svg' },
-    { rel: 'preload', href: '/logo.svg', as: 'image', type: 'image/svg+xml' }
-  ],
-})
-
 const email = ref('')
 const loading = ref(false)
 const error = ref('')
@@ -78,21 +81,34 @@ async function handleSubmit() {
 
   loading.value = true
   try {
-    const res = await fetch(`${API_BASE}/api/auth/forgot-password`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ email: email.value.trim().toLowerCase() }),
-    })
-    const data = await res.json()
+    // Store password reset email in session storage instead of sending to backend
+    if (typeof window !== 'undefined') {
+      try {
+        const resetToken = 'demo-reset-token-' + Date.now()
+        const displayName = email.value.split('@')[0].replace(/[._-]+/g, ' ').replace(/\b\w/g, c => c.toUpperCase())
+        const emailEntry = {
+          _id: `email-${Date.now()}`,
+          recipientEmail: email.value.trim().toLowerCase(),
+          senderEmail: 'pettyflo.support@example.com',
+          senderName: 'PettyFlo Support',
+          subject: 'Reset your Petty Cash Voucher password',
+          text: `Hello,\n\nYou requested a password reset for your Petty Cash Voucher account.\n\nClick the link below to set a new password:\nhttps://pettycashvoucher.netlify.app/reset-password?token=${resetToken}&email=${encodeURIComponent(email.value.trim().toLowerCase())}\n\nThis link will expire in 30 minutes. If you did not request this reset, please ignore this email.`,
+          html: null,
+          type: 'password-reset',
+          relatedId: null,
+          metadata: null,
+          createdAt: new Date().toISOString(),
+          isRead: false
+        }
 
-    if (!res.ok) {
-      // Handle rate limiting specifically
-      if (data.error && data.error.includes('Too many password reset attempts')) {
-        error.value = data.error
-      } else {
-        error.value = data.error || 'Failed to send reset link'
+        // Get existing emails from session storage
+        const existingEmails = JSON.parse(sessionStorage.getItem('pcv_emails') || '[]')
+        // Add new email at the beginning
+        const updatedEmails = [emailEntry, ...existingEmails]
+        sessionStorage.setItem('pcv_emails', JSON.stringify(updatedEmails))
+      } catch (error) {
+        console.warn('Failed to store password reset email in session storage:', error)
       }
-      return
     }
 
     message.value = 'A reset link has been sent to your email. Please check your inbox.'

@@ -4,10 +4,20 @@
     <aside :class="['sidebar', { 'open': sidebarOpen }]">
       <div class="sidebar__brand">
         <div class="sidebar__icon">
-          <img src="/logo.svg" alt="Getpayed logo" width="28" height="28" />
+          <svg
+            width="28"
+            height="28"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="#ffffff"
+            stroke-width="2"
+          >
+            <rect x="2" y="7" width="20" height="14" rx="2" />
+            <path d="M16 7V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v2" />
+          </svg>
         </div>
         <div>
-          <p class="sidebar__company">Getpayed Ltd.</p>
+          <p class="sidebar__company">PettyFlo Ltd.</p>
           <p class="sidebar__system">PCV System</p>
         </div>
         <button @click="emit('close')" aria-label="Close menu" class="sidebar__close">
@@ -109,28 +119,9 @@
           Vouchers
         </NuxtLink>
         <NuxtLink
-          :to="{ name: 'leaverequest' }"
-          @click="emit('close')"
-          :class="['sidebar__nav-item', { 'active': route.name === 'leaverequest' }]">
-          <svg
-            width="16"
-            height="16"
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="currentColor"
-            stroke-width="2"
-          >
-            <rect x="3" y="4" width="18" height="16" rx="2" />
-            <line x1="8" y1="2" x2="8" y2="6" />
-            <line x1="16" y1="2" x2="16" y2="6" />
-            <line x1="3" y1="10" x2="21" y2="10" />
-          </svg>
-          Leave Request
-        </NuxtLink>
-        <NuxtLink
           v-if="isAdmin"
-         
-         
+
+
           :to="{ name: 'admin' }"
           @click="emit('close')"
          :class="['sidebar__nav-item', { 'active': route.name === 'admin' }]">
@@ -216,11 +207,29 @@ const userInitial = computed(() => {
 async function fetchUnreadCount() {
   try {
     if (!userEmail.value) return
-    const response = await fetch(`${API_BASE}/api/email/unread-count?email=${userEmail.value}`)
-    const data = await response.json()
-    unreadCount.value = data.count || 0
+
+    // Calculate unread count from sessionStorage
+    if (typeof window !== 'undefined') {
+      const sessionEmails = sessionStorage.getItem('pcv_emails')
+      if (sessionEmails) {
+        try {
+          const allEmails = JSON.parse(sessionEmails)
+          // Filter emails for current user and count unread
+          const userEmails = allEmails.filter(email => email.recipientEmail === userEmail.value)
+          unreadCount.value = userEmails.filter(email => !email.isRead).length
+        } catch (parseError) {
+          console.warn('Failed to parse session emails for unread count:', parseError)
+          unreadCount.value = 0
+        }
+      } else {
+        unreadCount.value = 0
+      }
+    } else {
+      unreadCount.value = 0
+    }
   } catch (error) {
     console.error('Failed to fetch unread count:', error)
+    unreadCount.value = 0
   }
 }
 

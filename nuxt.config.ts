@@ -6,14 +6,7 @@ export default defineNuxtConfig({
   css: ['~/assets/css/main.css'],
   app: {
     head: {
-      link: [
-        {
-          rel: 'preload',
-          href: '/logo.svg',
-          as: 'image',
-          type: 'image/svg+xml'
-        }
-      ]
+      link: []
     }
   },
   runtimeConfig: {

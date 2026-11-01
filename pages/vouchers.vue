@@ -46,7 +46,7 @@
       <div class="card">
         <div class="preview-head">
           <div>
-            <p class="company-label">Getpayed Technology Solutions Ltd.</p>
+            <p class="company-label">PettyFlo Ltd.</p>
             <h2 class="preview-title serif">Petty Cash Voucher</h2>
           </div>
           <div class="preview-head__right">
@@ -439,7 +439,7 @@ const activeTab = ref('sent')
 onMounted(async () => {
   const saved = localStorage.getItem('pcv_vouchers_tab')
   if (saved === 'sent' || saved === 'received') activeTab.value = saved
-  
+
   // Fetch vouchers when the page loads to ensure fresh data
   try {
     await fetchVouchers()
@@ -459,11 +459,11 @@ const receivedVouchers = computed(() =>
     const email = userEmail.value.toLowerCase()
     const toMatch = String(voucher.to).toLowerCase() === email
     const ccMatch = String(voucher.cc).toLowerCase() === email
-    const financeRouted = String(voucher.to).toLowerCase() === FINANCE_EMAIL || 
+    const financeRouted = String(voucher.to).toLowerCase() === FINANCE_EMAIL ||
                           String(voucher.cc).toLowerCase() === FINANCE_EMAIL
 
     const submittedBy = String(voucher.submittedBy || '').toLowerCase()
-    // For super admins: 
+    // For super admins:
     // - Vouchers from admins: show regardless of status (will display as pending unless processed/rejected)
     // - Vouchers from regular users: only show if approved
     if (isSuperAdmin.value) {
@@ -488,6 +488,18 @@ const receivedVouchers = computed(() =>
 
     const isMatch = toMatch || ccApprovalsMatch || (financeRouted && email === FINANCE_MANAGER_EMAIL.toLowerCase())
     if (!isMatch) return false
+
+    // Filter out vouchers that have been approved, declined, processed, or rejected
+    // These should disappear from the received tab once acted upon
+    // EXCEPTION: Finance manager should see approved vouchers from department member
+    const status = (voucher.status || '').toLowerCase()
+    const isFinanceManager = email === FINANCE_MANAGER_EMAIL.toLowerCase()
+    const isFromDeptMember = submittedBy === 'department.member@example.com'
+    const shouldShowApprovedVoucher = isFinanceManager && isFromDeptMember && status === 'approved'
+
+    if (!shouldShowApprovedVoucher && (status === 'approved' || status === 'declined' || status === 'processed' || status === 'rejected')) {
+      return false
+    }
 
     if (isSuperAdmin.value) {
       // For super admins, filter out vouchers that have been processed or rejected by anyone

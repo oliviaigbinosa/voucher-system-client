@@ -13,7 +13,7 @@
 
     <div v-else-if="emails.length === 0" class="vouchers-empty">
       <p class="vouchers-empty__title">No emails yet</p>
-      <p class="vouchers-empty__sub">When vouchers, invites, leave requests, or password reset emails are sent to you, they'll appear here.</p>
+      <p class="vouchers-empty__sub">When vouchers, invites, or password reset emails are sent to you, they'll appear here.</p>
     </div>
 
     <div v-else class="inbox-list card">
@@ -99,64 +99,93 @@ const selectedEmail = ref(null)
 async function fetchEmails() {
   try {
     if (!userEmail.value) return
-    const response = await fetch(`${API_BASE}/api/email/inbox?email=${userEmail.value}`)
-    const data = await response.json()
-    let fetched = data.emails || []
 
-    // Keep finance inbox aligned with server-side routing.
-    // For finance.manager we show all emails sent to that mailbox, except
-    // department-member declined voucher notices that are intentionally excluded.
-    const FINANCE_EMAIL = 'finance.manager@example.com'
-    const DEPT_MEMBER_EMAIL = 'department.member@example.com'
-    const me = String(userEmail.value || '').toLowerCase()
-    if (me === FINANCE_EMAIL) {
-      fetched = fetched.filter((e) => {
-        const type = String(e.type || '').toLowerCase()
-        const sender = String(e.senderEmail || '').toLowerCase()
-        const recipient = String(e.recipientEmail || '').toLowerCase()
-        const status = String(e?.metadata?.voucherStatus || '').toLowerCase()
+    // Only use sessionStorage for emails (cleared when browser tab closes)
+    if (typeof window !== 'undefined') {
+      const sessionEmails = sessionStorage.getItem('pcv_emails')
+      if (sessionEmails) {
+        try {
+          const allEmails = JSON.parse(sessionEmails)
+          // Filter emails to only show those addressed to the current user
+          const userEmails = allEmails.filter(email => email.recipientEmail === userEmail.value)
 
-        if (recipient !== FINANCE_EMAIL) return false
+          // Apply finance manager filtering logic
+          const FINANCE_MANAGER_EMAIL = 'finance.manager@example.com'
+          const DEPT_MEMBER_EMAIL = 'department.member@example.com'
 
-        if (type === 'leave-status') {
-          return sender === FINANCE_EMAIL && ['approved', 'declined'].includes(status)
+          if (userEmail.value.toLowerCase() === FINANCE_MANAGER_EMAIL) {
+            emails.value = userEmails.filter(email => {
+              const docType = String(email.type || '').toLowerCase()
+              const senderEmail = String(email.senderEmail || '').toLowerCase()
+              const metadataStatus = email?.metadata?.voucherStatus
+              const statusValue = String(metadataStatus || '').trim().toLowerCase()
+
+              // Allow password reset emails
+              if (docType === 'password-reset') {
+                return true
+              }
+
+              if (docType === 'voucher' || docType === 'voucher-status') {
+                const isDepartmentMemberDeclinedVoucher =
+                  senderEmail === DEPT_MEMBER_EMAIL && statusValue === 'declined'
+
+                if (isDepartmentMemberDeclinedVoucher) {
+                  return false
+                }
+
+                const isApprovedVoucherFromDepartmentMember =
+                  senderEmail === DEPT_MEMBER_EMAIL && statusValue === 'approved'
+
+                const isFinanceManagerProcessedRejectedStatus =
+                  senderEmail === FINANCE_MANAGER_EMAIL && ['processed', 'rejected'].includes(statusValue)
+
+                const isAdminOrOtherSenderVoucher =
+                  senderEmail &&
+                  senderEmail !== FINANCE_MANAGER_EMAIL &&
+                  senderEmail !== DEPT_MEMBER_EMAIL &&
+                  !['processed', 'rejected'].includes(statusValue)
+
+                return isApprovedVoucherFromDepartmentMember || isFinanceManagerProcessedRejectedStatus || isAdminOrOtherSenderVoucher
+              }
+
+              return false
+            })
+          } else {
+            emails.value = userEmails
+          }
+        } catch (parseError) {
+          console.warn('Failed to parse session emails:', parseError)
+          emails.value = []
         }
-
-        if (type === 'leave-request') {
-          // Show leave requests where finance.manager is the recipient
-          return true
-        }
-
-        if ((type === 'voucher' || type === 'voucher-status')) {
-          if (sender === DEPT_MEMBER_EMAIL && status === 'declined') return false
-
-          const isApprovedDeptVoucher = sender === DEPT_MEMBER_EMAIL && status === 'approved'
-          const isFinanceProcessedRejected = sender === FINANCE_EMAIL && ['processed', 'rejected'].includes(status)
-          const isAdminOrOtherNonFinanceVoucher = sender && sender !== FINANCE_EMAIL && sender !== DEPT_MEMBER_EMAIL && !['processed', 'rejected'].includes(status)
-
-          return isApprovedDeptVoucher || isFinanceProcessedRejected || isAdminOrOtherNonFinanceVoucher
-        }
-
-        return false
-      })
+      } else {
+        emails.value = []
+      }
+    } else {
+      emails.value = []
     }
-
-    emails.value = fetched
   } catch (error) {
     console.error('Failed to fetch emails:', error)
+    emails.value = []
   } finally {
     loading.value = false
   }
 }
 
 async function markAsRead(emailId) {
-  try {
-    await fetch(`${API_BASE}/api/email/${emailId}/read`, {
-      method: 'PATCH',
-    })
-    window.dispatchEvent(new CustomEvent('inbox-updated'))
-  } catch (error) {
-    console.error('Failed to mark email as read:', error)
+  // Only update in sessionStorage
+  if (typeof window !== 'undefined') {
+    try {
+      // Get ALL emails from sessionStorage, not just the filtered ones
+      const allEmails = JSON.parse(sessionStorage.getItem('pcv_emails') || '[]')
+      const index = allEmails.findIndex((e) => e._id === emailId)
+      if (index !== -1) {
+        allEmails[index].isRead = true
+        sessionStorage.setItem('pcv_emails', JSON.stringify(allEmails))
+        window.dispatchEvent(new CustomEvent('inbox-updated'))
+      }
+    } catch (sessionError) {
+      console.warn('Failed to mark email as read in sessionStorage:', sessionError)
+    }
   }
 }
 
@@ -205,8 +234,6 @@ function formatType(type) {
   const typeMap = {
     'voucher': 'Voucher',
     'invite': 'Invite',
-    'leave-request': 'Leave Request',
-    'leave-status': 'Leave Status',
     'voucher-status': 'Voucher Status',
     'password-reset': 'Password Reset',
   }
@@ -338,12 +365,6 @@ onMounted(() => {
 .type-invite {
   background: #d1fae5;
   color: #065f46;
-}
-
-.type-leave-request,
-.type-leave-status {
-  background: #fef3c7;
-  color: #92400e;
 }
 
 .type-voucher-status {

@@ -73,7 +73,7 @@
         <div class="card">
           <div class="preview-head">
             <div>
-              <p class="company-label">Getpayed Technology Solutions Ltd.</p>
+              <p class="company-label">PettyFlo Ltd.</p>
               <h2 class="preview-title serif">Petty Cash Voucher</h2>
             </div>
             <div class="preview-head__right">
@@ -414,7 +414,7 @@
             <input
               v-model="onboardForm.email"
               type="email"
-              placeholder="Enter a getpayed email"
+              placeholder="Enter an email"
               :class="{ error: onboardErrors.email }"
               @input="onboardForm.email = $event.target.value.replace(/[^a-zA-Z.@]/g, '').toLowerCase(); delete onboardErrors.email"
             />
@@ -831,6 +831,54 @@
       </div>
     </div>
   </div>
+  <div v-if="showDeleteErrorModal" class="modal-backdrop" @click.self="closeDeleteErrorModal">
+    <div
+      class="modal"
+      role="dialog"
+      aria-modal="true"
+      aria-label="Delete error"
+      style="max-width: 480px;"
+    >
+      <div class="modal-header" style="padding: 8px 24px 4px;">
+        <div class="modal-header__title" style="font-size: 16px; font-weight: 700; letter-spacing: -0.04em;">
+          Demo Mode
+        </div>
+        <button class="modal-close" @click="closeDeleteErrorModal" aria-label="Close">✕</button>
+      </div>
+      <div class="modal-body">
+        <p style="font-size: 18px; font-weight: 900; letter-spacing: -0.04em; margin: 0;">
+          Demo mode. Can't delete existing users in this system!
+        </p>
+      </div>
+      <div class="modal-footer" style="border-top: none;">
+        <button class="btn btn-primary" style="border-radius: 9999px;" @click="closeDeleteErrorModal">OK</button>
+      </div>
+    </div>
+  </div>
+  <div v-if="showDeleteDeptErrorModal" class="modal-backdrop" @click.self="closeDeleteDeptErrorModal">
+    <div
+      class="modal"
+      role="dialog"
+      aria-modal="true"
+      aria-label="Delete department error"
+      style="max-width: 480px;"
+    >
+      <div class="modal-header" style="padding: 8px 24px 4px;">
+        <div class="modal-header__title" style="font-size: 16px; font-weight: 700; letter-spacing: -0.04em;">
+          Demo Mode
+        </div>
+        <button class="modal-close" @click="closeDeleteDeptErrorModal" aria-label="Close">✕</button>
+      </div>
+      <div class="modal-body">
+        <p style="font-size: 18px; font-weight: 900; letter-spacing: -0.04em; margin: 0;">
+          Demo mode. Can't delete department
+        </p>
+      </div>
+      <div class="modal-footer" style="border-top: none;">
+        <button class="btn btn-primary" style="border-radius: 9999px;" @click="closeDeleteDeptErrorModal">OK</button>
+      </div>
+    </div>
+  </div>
   <FilePreview :show="showFilePreview" :file="previewFile" @close="showFilePreview = false" />
 </template>
 
@@ -897,6 +945,8 @@ const editingDeptName = ref('')
 const editingDeptError = ref('')
 const showDeleteDeptModal = ref(false)
 const deptToDelete = ref('')
+const showDeleteErrorModal = ref(false)
+const showDeleteDeptErrorModal = ref(false)
 
 const expandedPurposes = reactive({})
 
@@ -1117,9 +1167,7 @@ function handleCreateDepartment() {
     newDepartmentError.value = 'Department already exists'
     return
   }
-  onboardDepts.value.push(dept)
-  onboardDepts.value.sort()
-  closeCreateDeptModal()
+  newDepartmentError.value = "Demo mode. Can't create department"
 }
 
 function openEditDeptModal(dept) {
@@ -1146,20 +1194,12 @@ function handleEditDepartment() {
     editingDeptError.value = 'Department already exists'
     return
   }
-  const index = onboardDepts.value.indexOf(editingDeptOriginal.value)
-  if (index !== -1) {
-    onboardDepts.value[index] = name
-    onboardDepts.value.sort()
-  }
-  if (onboardForm.department === editingDeptOriginal.value) {
-    onboardForm.department = name
-  }
-  closeEditDeptModal()
+  editingDeptError.value = "Demo mode. Can't edit department"
 }
 
 function openDeleteDeptModal(dept) {
   deptToDelete.value = dept
-  showDeleteDeptModal.value = true
+  showDeleteDeptErrorModal.value = true
 }
 
 function closeDeleteDeptModal() {
@@ -1231,9 +1271,9 @@ const pendingOnboardingCount = computed(
 )
 
 function isOnboardEmail(v, role = '') {
-  if (!/^[^\s@]+@getpayedmail\.com$/.test(v)) return false
+  if (!/^[^\s@]+@example\.com$/.test(v)) return false
   if (role === 'super admin') return true
-  return /^[^\s@.]+\.[^\s@.]+(?:\.[^\s@.]+)*@getpayedmail\.com$/.test(v)
+  return /^[^\s@.]+\.[^\s@.]+(?:\.[^\s@.]+)*@example\.com$/.test(v)
 }
 
 function generateStrongPassword() {
@@ -1262,9 +1302,9 @@ async function handleAddUser() {
 
   if (!onboardForm.email) {
     onboardErrors.email = 'Email is required'
-  } else if (!/@getpayedmail\.com$/.test(onboardForm.email)) {
+  } else if (!/@example\.com$/.test(onboardForm.email)) {
     onboardErrors.email = 'Email must end with @example.com'
-  } else if (!/^[^\s@.]+\.[^\s@.]+@getpayedmail\.com$/.test(onboardForm.email)) {
+  } else if (!/^[^\s@.]+\.[^\s@.]+@example\.com$/.test(onboardForm.email)) {
     onboardErrors.email = 'Enter a valid email'
   }
   if (!onboardForm.department) {
@@ -1322,13 +1362,20 @@ async function handleAddUser() {
 }
 
 function promptDeleteUser(user) {
-  userToDelete.value = user
-  showDeleteModal.value = true
+  showDeleteErrorModal.value = true
 }
 
 function closeDeleteModal() {
   showDeleteModal.value = false
   userToDelete.value = null
+}
+
+function closeDeleteErrorModal() {
+  showDeleteErrorModal.value = false
+}
+
+function closeDeleteDeptErrorModal() {
+  showDeleteDeptErrorModal.value = false
 }
 
 async function confirmDeleteUser() {

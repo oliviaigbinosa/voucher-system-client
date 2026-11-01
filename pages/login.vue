@@ -2,9 +2,19 @@
   <div class="login-wrap">
     <div class="login-card">
       <div class="login-card__logo">
-        <img src="/logo.svg" alt="Getpayed logo" width="40" height="40" />
+        <svg
+          width="40"
+          height="40"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="#1c3557"
+          stroke-width="2"
+        >
+          <rect x="2" y="7" width="20" height="14" rx="2" />
+          <path d="M16 7V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v2" />
+        </svg>
       </div>
-      <p class="login-card__company">Getpayed Technology Solutions Ltd.</p>
+      <p class="login-card__company">PettyFlo Ltd.</p>
       <h1 class="login-card__title serif">Sign in to your account</h1>
       <p class="login-card__sub">Petty Cash Voucher System</p>
 
@@ -17,7 +27,7 @@
           v-model="loginForm.email"
           label="Email Address"
           type="email"
-          placeholder="Enter your getpayed email"
+          placeholder="Enter your email"
           :error="loginErrors.email"
           :disabled="loggingIn"
           @input="delete loginErrors.email"
@@ -370,14 +380,7 @@
 import { reactive, ref } from 'vue'
 import { useRouter, useRoute } from 'vue-router'
 import FormField from '../components/FormField.vue'
-import { API_BASE, loginUser, fetchVouchers, fetchLeaveRequests, fetchOnboardingUsers } from '~/composables/appState'
-
-useHead({
-  link: [
-    { rel: 'icon', type: 'image/svg+xml', href: '/logo.svg' },
-    { rel: 'preload', href: '/logo.svg', as: 'image', type: 'image/svg+xml' }
-  ],
-})
+import { API_BASE, loginUser, fetchVouchers, fetchOnboardingUsers } from '~/composables/appState'
 
 const router = useRouter()
 const route = useRoute()
@@ -435,18 +438,17 @@ async function handleLogin() {
     }
 
     loginUser(data.email, data.role, data.department || '', data.createdBy || '')
-    
-    // Fetch vouchers and leave requests immediately after login
+
+    // Fetch vouchers immediately after login
     const fetchPromises = [
-      fetchVouchers(),
-      fetchLeaveRequests()
+      fetchVouchers()
     ]
-    
+
     // Fetch onboarding users if the user is an admin or super admin
     if (data.role === 'admin' || data.role === 'super admin') {
       fetchPromises.push(fetchOnboardingUsers())
     }
-    
+
     await Promise.all(fetchPromises)
     
     router.replace(data.role === 'admin' || data.role === 'super admin' ? { name: 'admin' } : { name: 'form' })
@@ -497,16 +499,15 @@ async function quickLogin(role) {
     }
 
     loginUser(data.email, data.role, data.department || '', data.createdBy || '')
-    
+
     const fetchPromises = [
-      fetchVouchers(),
-      fetchLeaveRequests()
+      fetchVouchers()
     ]
-    
+
     if (data.role === 'admin' || data.role === 'super admin') {
       fetchPromises.push(fetchOnboardingUsers())
     }
-    
+
     await Promise.all(fetchPromises)
     
     router.replace(data.role === 'admin' || data.role === 'super admin' ? { name: 'admin' } : { name: 'form' })

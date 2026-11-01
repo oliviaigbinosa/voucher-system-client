@@ -22,7 +22,7 @@
       <div class="modal-body">
         <div class="preview-head">
           <div>
-            <p class="company-label">Getpayed Technology Solutions Ltd.</p>
+            <p class="company-label">PettyFlo Ltd.</p>
             <h2 class="preview-title serif">Petty Cash Voucher</h2>
           </div>
           <div class="preview-head__right">

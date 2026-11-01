@@ -173,26 +173,32 @@ async function handleSubmit() {
 
   loading.value = true
   try {
-    const res = await fetch(`${API_BASE}/api/auth/reset-password`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        token: token.value,
-        email: email.value,
-        newPassword: newPassword.value,
-        confirmPassword: confirmPassword.value,
-      }),
-    })
-    const data = await res.json()
+    // For demo purposes, just store confirmation email in session storage
+    if (typeof window !== 'undefined') {
+      try {
+        const emailEntry = {
+          _id: `email-${Date.now()}`,
+          recipientEmail: email.value,
+          senderEmail: 'pettyflo.support@example.com',
+          senderName: 'PettyFlo Support',
+          subject: 'Your password has been reset',
+          text: `Your password for the Petty Cash Voucher system has been successfully reset. If you did not perform this action, contact support.`,
+          html: null,
+          type: 'password-reset',
+          relatedId: null,
+          metadata: null,
+          createdAt: new Date().toISOString(),
+          isRead: false
+        }
 
-    if (!res.ok) {
-      // Handle rate limiting specifically
-      if (data.error && data.error.includes('Too many reset attempts')) {
-        errors.general = data.error
-      } else {
-        errors.general = data.error || 'Failed to reset password'
+        // Get existing emails from session storage
+        const existingEmails = JSON.parse(sessionStorage.getItem('pcv_emails') || '[]')
+        // Add new email at the beginning
+        const updatedEmails = [emailEntry, ...existingEmails]
+        sessionStorage.setItem('pcv_emails', JSON.stringify(updatedEmails))
+      } catch (sessionError) {
+        console.warn('Failed to store reset confirmation email in session storage:', sessionError)
       }
-      return
     }
 
     success.value = true
